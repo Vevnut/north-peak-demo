@@ -8,7 +8,7 @@ Live preview: https://north-peak-demo.vercel.app (labeled as a concept and hidde
 The Vercel project `north-peak-demo` (team **bradleys-boat-care**) is connected to this repo:
 pushing to `main` deploys to production automatically. There is no build step; Vercel serves the files as-is.
 
-Commits must be authored as **Graeme Bradley &lt;graemebradley24@gmail.com&gt;** (set in this repo's local git config),
+Commits must be authored by the Vercel team owner's git identity (already set in this repo's local git config),
 or the Vercel team will block the deployment.
 
 ## What's here
