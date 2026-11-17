@@ -128,7 +128,9 @@ section{padding:150px 0}
 .booking label{display:flex;flex-direction:column;padding:18px 24px;border-right:1px solid var(--line);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:600}
 .booking input,.booking select{border:0;font:500 1rem var(--sans);color:var(--ink);margin-top:4px;background:transparent;outline:none;width:100%}
 .booking .btn{border-radius:0;padding:0 34px}
-.booking-note{text-align:center;font-size:.82rem;color:var(--muted);margin-top:28px}
+.booking-note{text-align:center;font-size:.82rem;color:var(--muted);margin-top:16px}
+.booking[hidden]{display:none}
+.booking.multi{grid-template-columns:1.2fr 1fr 1fr .7fr auto}
 
 /* ---------- intro ---------- */
 .intro{padding-top:130px}
@@ -389,6 +391,10 @@ footer{background:var(--navy-deep);color:#a9b6c0;padding:40px 0 34px;font-size:.
   .booking label:nth-child(2){border-right:0}
   .booking label:nth-child(3){grid-column:1/-1;border-top:1px solid var(--line);border-right:0}
   .booking .btn{grid-column:1/-1;padding:18px}
+  .booking.multi label:nth-child(1){grid-column:1/-1;border-right:0;border-bottom:1px solid var(--line)}
+  .booking.multi label:nth-child(2){border-right:1px solid var(--line)}
+  .booking.multi label:nth-child(3){grid-column:auto;border-top:0;border-right:0}
+  .booking.multi label:nth-child(4){grid-column:1/-1;border-top:1px solid var(--line);border-right:0}
   .intro{padding-top:96px}
   .bleed{height:70vh}
   .tabs{gap:28px;margin:0 -20px 40px;padding:0 20px}
@@ -467,7 +473,14 @@ footer{background:var(--navy-deep);color:#a9b6c0;padding:40px 0 34px;font-size:.
     </div>
   </section>
 
-  <p class="booking-note">Book direct and save 10% or more.</p>
+  <!-- date search: built from the bookable homes in properties.js; hands dates and guests to that home's Lodgify checkout -->
+  <form class="booking" id="booking" aria-label="Check availability" style="--i:5" hidden>
+    <label>Check-in <input type="date" name="arrival" id="arrival" required></label>
+    <label>Check-out <input type="date" name="departure" id="departure" required></label>
+    <label>Guests <select name="adults" id="adults"></select></label>
+    <button class="btn btn-gold" type="submit">Check Availability</button>
+  </form>
+  <p class="booking-note"><span id="bookingFor"></span>Book direct and save 10% or more.</p>
 
   <!-- INTRO -->
   <section class="intro" id="about">
@@ -845,6 +858,48 @@ footer{background:var(--navy-deep);color:#a9b6c0;padding:40px 0 34px;font-size:.
       : words(soon) + (soon === 1 ? ' home' : ' homes') + ' opening on the mountain soon.';
   })();
   if (liveHost){ var demoTag = document.querySelector('.demo-tag'); if (demoTag) demoTag.remove(); }
+
+  /* ---------- date search: hands dates and guests to the home's Lodgify checkout ---------- */
+  (function setupBooking(){
+    var f = document.getElementById('booking');
+    if (!f) return;
+    // only homes with a booking link that may show here (approved, or any on previews)
+    var homes = HOMES.filter(function(p){ return p.status === 'bookable' && p.booking && p.booking.url && ok(p.booking); });
+    if (!homes.length){ f.remove(); return; }
+    var a = f.arrival, d = f.departure, g = f.adults, pick = null;
+    if (homes.length > 1){
+      f.classList.add('multi');
+      f.insertAdjacentHTML('afterbegin', '<label>Home <select name="home" id="bookHome">' +
+        homes.map(function(p, i){ return '<option value="' + i + '">' + esc(p.name) + '</option>'; }).join('') + '</select></label>');
+      pick = document.getElementById('bookHome');
+    }
+    function home(){ return homes[pick ? +pick.value : 0]; }
+    function fillGuests(){
+      var max = home().sleeps || 16, keep = +g.value || 2, opts = '';
+      for (var n = 1; n <= max; n++) opts += '<option' + (n === Math.min(keep, max) ? ' selected' : '') + '>' + n + '</option>';
+      g.innerHTML = opts;
+    }
+    var forEl = document.getElementById('bookingFor');
+    function label(){ forEl.textContent = homes.length === 1 ? 'Checks live availability for the ' + home().name + '. ' : ''; }
+    fillGuests(); label();
+    if (pick) pick.addEventListener('change', function(){ fillGuests(); label(); });
+    function iso(dt){ return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0'); }
+    a.min = d.min = iso(new Date());
+    a.addEventListener('change', function(){
+      if (!a.value) return;
+      var n = new Date(a.value + 'T12:00'); n.setDate(n.getDate() + 1); d.min = iso(n);
+      if (!d.value || d.value <= a.value) d.value = d.min;
+    });
+    f.addEventListener('submit', function(e){
+      e.preventDefault();
+      var u = new URL(home().booking.url);   // keeps the link's own settings, e.g. currency
+      u.searchParams.set('arrival', a.value);
+      u.searchParams.set('departure', d.value);
+      u.searchParams.set('adults', g.value);
+      location.href = u.toString();
+    });
+    f.hidden = false;
+  })();
 
   /* staggered reveals: each .rv gets its index inside its group */
   document.querySelectorAll('[data-stagger]').forEach(function(g){

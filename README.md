@@ -50,3 +50,10 @@ approved) or Contact Us, and an unapproved opening date shows as "Coming soon". 
 stays complete; adding `?as=live` to a preview address shows exactly what the launched site will show.
 
 `node scripts/check-properties.mjs --launch` fails until every item it lists is approved and `liveHosts` is set.
+
+### Date search
+
+The Check-in / Check-out / Guests bar under the hero sends the chosen dates and guest count to a bookable home's
+`booking.url` (as `arrival`, `departure` and `adults`, which Lodgify's checkout fills in). It uses only `"bookable"` homes
+whose link may show (approved, or any on previews), caps guests at that home's `sleeps`, and is hidden when there are none.
+With two or more such homes it adds a Home picker automatically.
