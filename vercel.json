@@ -4,5 +4,17 @@
       "source": "/(.*)",
       "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
     }
+  ],
+  "redirects": [
+    { "source": "/en", "destination": "/", "permanent": false },
+    { "source": "/en/overview", "destination": "/#homes", "permanent": false },
+    { "source": "/en/custom-page-name", "destination": "/#homes", "permanent": false },
+    { "source": "/en/custom-page-name1", "destination": "/#homes", "permanent": false },
+    { "source": "/en/cozy-barn-cabin", "destination": "/#homes", "permanent": false },
+    { "source": "/en/half-a-frame-2b1b", "destination": "/#homes", "permanent": false },
+    { "source": "/en/experiences", "destination": "/#experiences", "permanent": false },
+    { "source": "/en/reviews1", "destination": "/#reviews", "permanent": false },
+    { "source": "/en/construction", "destination": "/#build", "permanent": false },
+    { "source": "/en/custom-page-name2", "destination": "/#plan", "permanent": false }
   ]
 }
