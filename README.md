@@ -20,11 +20,12 @@ or the Vercel team will block the deployment.
 | `scripts/check-properties.mjs` | Checks `properties.js` before you push |
 | `img/logo-*.png` | Transparent logo files cut from the original logo |
 | `img/homes/` | Renderings split out of each upcoming home's collage |
+| `img/site/` | Hero, guide and construction photos and the favicon, converted from the old site's PNGs to sized JPEGs |
 | `img/guide/` | Local guide photos (Wikimedia Commons, credited on the page) and ski area logos |
 | `vercel.json` | Tells search engines not to index the demo; redirects old Lodgify page addresses |
 | `robots.txt` | Tells search engines not to crawl the demo |
 
-Mountain View A-Frame photos still load from the current Lodgify site and should be self-hosted before going live.
+Mountain View A-Frame photos (and the few other `.jpg` photos in `index.html`) still load from the current Lodgify site and should be self-hosted before going live.
 
 ## Adding or updating a home
 
@@ -57,3 +58,16 @@ The Check-in / Check-out / Guests bar under the hero sends the chosen dates and 
 `booking.url` (as `arrival`, `departure` and `adults`, which Lodgify's checkout fills in). It uses only `"bookable"` homes
 whose link may show (approved, or any on previews), caps guests at that home's `sleeps`, and is hidden when there are none.
 With two or more such homes it adds a Home picker automatically.
+
+## Search engines
+
+The demo is hidden from search on purpose. The page already has its title, description, share-card tags
+(Open Graph) and `LodgingBusiness` structured data built only from facts shown on the page. On launch day:
+
+1. Remove `<meta name="robots" content="noindex, nofollow">` from `index.html`, the `X-Robots-Tag` header from
+   `vercel.json`, and change `robots.txt` to `Allow: /`, once the real domain is connected (the canonical link below keeps the vercel.app copy out of results).
+2. Add `<link rel="canonical">` and `og:url` with the real domain, and point `og:image` and the schema `image` at it.
+3. Add the domain to Google Search Console and Bing Webmaster Tools, and update the Google Business Profile's
+   website link.
+
+`node scripts/check-properties.mjs --launch` lists each of these until it's done.

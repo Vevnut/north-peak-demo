@@ -74,6 +74,17 @@ if (!site || !Array.isArray(site.liveHosts) || !site.liveHosts.length) pending.p
 const html = readFileSync(path.join(root, 'index.html'), 'utf8');
 if (/checkout\.lodgify\.com/.test(html)) errors.push('index.html has a hard-coded Lodgify checkout link; move it into properties.js');
 
+// search engines: the demo is deliberately hidden; these are the switches to flip on launch day
+if (/<meta name="robots" content="noindex/.test(html)) pending.push('SEO: index.html still has <meta name="robots" content="noindex"> (remove on launch day)');
+if (/noindex/.test(readFileSync(path.join(root, 'vercel.json'), 'utf8'))) pending.push('SEO: vercel.json still sends X-Robots-Tag: noindex (remove that header on launch day)');
+const robotsFile = path.join(root, 'robots.txt');
+if (existsSync(robotsFile) && /^Disallow:\s*\/\s*$/m.test(readFileSync(robotsFile, 'utf8'))) pending.push('SEO: robots.txt still blocks everything (change to "Allow: /" on launch day)');
+if (!/<link rel="canonical"/.test(html)) pending.push('SEO: index.html has no <link rel="canonical"> or og:url for the real domain');
+if (/vercel\.app/.test(html)) pending.push('SEO: index.html share image / schema still point at the vercel.app demo address');
+for (const m of html.matchAll(/https:\/\/[^"]*?vercel\.app\/([^"]+)"/g)) {
+  if (!existsSync(path.join(root, m[1]))) errors.push(`index.html links a file that does not exist: ${m[1]}`);
+}
+
 const shown = (homes || []).filter(p => p.status !== 'hidden').length;
 console.log(`Checked ${(homes || []).length} homes (${shown} shown).`);
 if (pending.length) {
