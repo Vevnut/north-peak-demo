@@ -260,17 +260,10 @@ section{padding:150px 0}
 .amen-list p{font-size:.9rem;color:#a9b6c0;line-height:1.6}
 
 /* ---------- experiences ---------- */
-.exp-row{display:grid;grid-template-columns:repeat(3,1fr);gap:44px;align-items:start}
-.exp-item:nth-child(2){margin-top:110px}
-.exp-item .ri{aspect-ratio:3/4}
-.exp-item h3{font-family:var(--serif);font-weight:500;font-size:1.8rem;line-height:1.1;color:var(--heading);margin:24px 0 10px}
-.exp-item p{color:var(--muted);font-size:.95rem;margin-bottom:18px}
 
 /* local guide */
-.guide{margin-top:130px}
+.guide{margin-top:56px}
 .guide-head{display:flex;justify-content:space-between;align-items:end;gap:20px 40px;flex-wrap:wrap;margin-bottom:30px}
-.guide-title{font-family:var(--serif);font-weight:500;font-size:clamp(2rem,3.2vw,2.7rem);line-height:1.08;color:var(--heading)}
-.guide-sub{color:var(--muted);font-size:.95rem;margin-top:8px}
 .chips{display:flex;gap:8px;flex-wrap:wrap}
 .chip{border:1px solid var(--line);background:transparent;color:var(--muted);padding:.65rem 1.15rem;border-radius:999px;font:600 .68rem var(--sans);letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:background-color .3s,color .3s,border-color .3s}
 .chip:hover{color:var(--heading);border-color:var(--heading)}
@@ -402,11 +395,7 @@ footer{background:var(--navy-deep);color:#a9b6c0;padding:40px 0 34px;font-size:.
   .foot{grid-template-columns:1fr 1fr}
 }
 @media (max-width:760px){
-  .exp-row{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -20px;padding:0 20px 10px;scrollbar-width:none}
-  .exp-row::-webkit-scrollbar{display:none}
-  .exp-item{flex:0 0 80%;scroll-snap-align:start}
-  .exp-item:nth-child(2){margin-top:0}
-  .guide{margin-top:90px}
+  .guide{margin-top:36px}
   .spots{grid-template-columns:1fr}
   .chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -20px;padding:0 20px 4px}
   .chips::-webkit-scrollbar{display:none}
@@ -583,39 +572,14 @@ footer{background:var(--navy-deep);color:#a9b6c0;padding:40px 0 34px;font-size:.
     <div class="wrap">
       <div class="split-head" data-stagger>
         <div>
-          <div class="eyebrow rv">Experiences</div>
+          <div class="eyebrow rv">Experiences &amp; local guide</div>
           <h2 class="display rv">Your basecamp for the White Mountains</h2>
         </div>
-        <p class="lead rv">Ski mountains, waterfalls, family attractions and great local food, all within an easy drive.</p>
+        <p class="lead rv">Our favorite spots near North Peak for every age and season: ski mountains, family days out, trails and waterfalls, and great local food.</p>
       </div>
-      <div class="exp-row" data-stagger>
-        <article class="exp-item rv">
-          <div class="ri"><div class="ri-in"><img src="img/site/railbikes-900.jpg" width="900" height="605" alt="Rail bikes crossing an iron bridge" loading="lazy"></div></div>
-          <h3>Granite State Railway</h3>
-          <p>Pedal custom-built, motor-assisted rail bikes along a scenic stretch of historic track through the forest.</p>
-          <a class="link" href="https://gsscenic.com/" target="_blank" rel="noopener">Buy tickets</a>
-        </article>
-        <article class="exp-item rv">
-          <div class="ri"><div class="ri-in"><img src="img/site/gorge-900.jpg" width="900" height="677" alt="Boardwalk through Lost River Gorge" loading="lazy"></div></div>
-          <h3>Lost River Gorge &amp; Boulder Caves</h3>
-          <p>Boardwalks, waterfalls and caves in Kinsman Notch, a landscape carved by the powerful forces of nature.</p>
-          <a class="link" href="https://www.google.com/maps/place/Lost+River+Gorge+%26+Boulder+Caves/@44.037235,-71.7866669,603m" target="_blank" rel="noopener">Get there</a>
-        </article>
-        <article class="exp-item rv">
-          <div class="ri"><div class="ri-in"><img src="img/site/foliage-900.jpg" width="900" height="673" alt="Fall foliage at sunset from a mountain overlook" loading="lazy"></div></div>
-          <h3>Hiking, skiing &amp; foliage</h3>
-          <p>Summit hikes in summer, ski days in winter and some of New England's best leaf peeping every fall.</p>
-          <a class="link" href="https://www.instagram.com/northpeakstays" target="_blank" rel="noopener">Follow @northpeakstays</a>
-        </article>
-      </div>
-
-      <!-- local guide -->
+      <!-- local guide: one tab per category -->
       <div class="guide" data-stagger>
         <div class="guide-head">
-          <div class="rv">
-            <h3 class="guide-title">The local guide</h3>
-            <p class="guide-sub">Our favorite spots near North Peak, for every age and every season.</p>
-          </div>
           <div class="chips rv" role="tablist" aria-label="Local guide" id="chips">
             <button class="chip" role="tab" aria-selected="true" aria-controls="g0" id="gt0">Ski mountains</button>
             <button class="chip" role="tab" aria-selected="false" aria-controls="g1" id="gt1" tabindex="-1">Family fun</button>
@@ -636,6 +600,7 @@ footer{background:var(--navy-deep);color:#a9b6c0;padding:40px 0 34px;font-size:.
 
           <div class="gpanel" role="tabpanel" id="g1" aria-labelledby="gt1">
             <ul class="spots">
+              <li class="spot"><div class="spot-img"><img class="ph" src="img/site/railbikes-900.jpg" alt="Rail bikes crossing an iron bridge" loading="lazy"></div><div class="spot-body"><div class="spot-top"><h4>Granite State Railway</h4><span class="tag">All ages</span></div><p>Pedal motor-assisted rail bikes along a scenic stretch of historic track through the forest.</p><div class="spot-foot"><span>Book ahead online</span><a href="https://gsscenic.com/" target="_blank" rel="noopener">Tickets</a></div></div></li>
               <li class="spot"><div class="spot-img"><img class="ph" src="img/guide/squam.jpg" alt="Squam Lake from above" loading="lazy"></div><div class="spot-body"><div class="spot-top"><h4>Squam Lakes Natural Science Center</h4><span class="tag">All ages</span></div><p>A live animal trail with black bears, mountain lions and bald eagles, plus seasonal lake cruises.</p><div class="spot-foot"><span>About 15 min · Holderness</span><a href="https://www.google.com/maps/search/?api=1&query=Squam+Lakes+Natural+Science+Center+Holderness+NH" target="_blank" rel="noopener">Map</a></div></div></li>
               <li class="spot"><div class="spot-img"><img class="ph" src="img/guide/clarks.jpg" alt="Clark's Trading Post sign in Lincoln" loading="lazy"></div><div class="spot-body"><div class="spot-top"><h4>Clark's Bears</h4><span class="tag">Kids</span></div><p>Trained bear shows, a steam train and old-time attractions, run by the Clark family since 1949.</p><div class="spot-foot"><span>About 25 min · Lincoln</span><a href="https://www.google.com/maps/search/?api=1&query=Clark%27s+Bears+Lincoln+NH" target="_blank" rel="noopener">Map</a></div></div></li>
               <li class="spot"><div class="spot-img"><img class="ph" src="img/guide/whales-tale.jpg" alt="Whale's Tale Waterpark" loading="lazy"></div><div class="spot-body"><div class="spot-top"><h4>Whale's Tale Waterpark</h4><span class="tag">All ages</span></div><p>A giant wave pool, water slides and a lazy river for hot summer days.</p><div class="spot-foot"><span>About 25 min · Lincoln · Summer</span><a href="https://www.google.com/maps/search/?api=1&query=Whale%27s+Tale+Waterpark+Lincoln+NH" target="_blank" rel="noopener">Map</a></div></div></li>
