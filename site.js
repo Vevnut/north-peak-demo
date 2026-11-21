@@ -19,10 +19,42 @@ window.NP = (function(){
   // the home's own page, made by scripts/build-homes.mjs from its name
   function slug(p){ return p.name.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
   function pageUrl(p){ return '/homes/' + slug(p); }
+  /* ---------- contact form and waitlist ---------- */
+  var FORMS = SITE.forms || {};
+  // previews always show the forms (without sending unless an endpoint is set); the launched site
+  // shows them only once the owner has approved an endpoint
+  var formsShow = FORMS.endpoint ? ok(FORMS) : !LIVE;
+  function waitlistHtml(p){
+    if (!formsShow || isOpen(p)) return '';
+    return '<form class="np-form waitlist" data-form="waitlist" novalidate>' +
+      '<input type="hidden" name="form" value="Waitlist"><input type="hidden" name="home" value="' + esc(p.name) + '">' +
+      '<label>Email me when it opens <input type="email" name="email" autocomplete="email" placeholder="you@example.com" required></label>' +
+      '<button class="btn btn-line" type="submit">Notify me</button>' +
+      '<label class="trap" aria-hidden="true">Leave empty <input name="_gotcha" tabindex="-1" autocomplete="off"></label>' +
+      '<p class="form-note">One email when bookings open. We never share your address.</p>' +
+      '<p class="form-status" role="status" aria-live="polite"></p></form>';
+  }
+  function wireForm(f){
+    var status = f.querySelector('.form-status'), btn = f.querySelector('[type=submit]');
+    function say(msg, bad){ status.textContent = msg; status.classList.toggle('bad', !!bad); }
+    f.addEventListener('submit', function(e){
+      e.preventDefault();
+      if (!f.checkValidity()){ f.reportValidity(); return; }
+      var trap = f.querySelector('[name=_gotcha]');
+      var done = f.dataset.form === 'waitlist' ? "You're on the list. We'll email you when it opens." : "Thanks! Your message is on its way, and we'll reply by email.";
+      if (trap && trap.value){ f.reset(); say(done); return; }   // a bot filled the hidden field
+      if (!FORMS.endpoint){ say('This is a design preview, so nothing was sent. On the launched site this goes straight to North Peak Stays.'); return; }
+      btn.disabled = true; say('Sending…');
+      fetch(FORMS.endpoint, { method: 'POST', body: new FormData(f), headers: { Accept: 'application/json' } })
+        .then(function(r){ if (!r.ok) throw new Error(r.status); f.reset(); say(done); })
+        .catch(function(){ say("Sorry, that didn't send. Please try again" + (textOk ? ', or text us at ' + TEXT.number.replace(/^\+1(\d{3})(\d{3})(\d{4})$/, '($1) $2-$3') : '') + '.', true); })
+        .then(function(){ btn.disabled = false; });
+    });
+  }
   // what the main button does, from the home's status and what the owner has approved;
-  // plan = where "Contact Us" goes on this page
+  // plan = where "Contact Us" goes on this page (the contact form when it shows)
   function action(p, plan){
-    plan = plan || '#plan';
+    plan = plan || (formsShow ? '#ask' : '#plan');
     if (p.status === 'bookable' && p.booking && p.booking.url && ok(p.booking)) return { label: 'Book Now', href: p.booking.url, primary: true, online: true };
     if (isOpen(p) && textOk) return { label: 'Text to Book', href: 'sms:' + TEXT.number, primary: true };
     if (isOpen(p)) return { label: 'Contact Us', href: plan, primary: true };
@@ -44,5 +76,5 @@ window.NP = (function(){
   }
   return { SITE: SITE, HOMES: HOMES, liveHost: liveHost, LIVE: LIVE, ok: ok, TEXT: TEXT, textOk: textOk,
     esc: esc, sized: sized, plural: plural, words: words, isOpen: isOpen, slug: slug, pageUrl: pageUrl,
-    action: action, badge: badge, meta: meta };
+    action: action, badge: badge, meta: meta, formsShow: formsShow, waitlistHtml: waitlistHtml, wireForm: wireForm };
 })();

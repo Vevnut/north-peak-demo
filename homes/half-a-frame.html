@@ -368,6 +368,26 @@ section{padding:150px 0}
 .steps span{font-size:.92rem;color:var(--muted)}
 
 /* ---------- plan your stay ---------- */
+/* ---------- contact form and waitlist ---------- */
+.ask{padding:20px 0 120px}
+.ask .wrap{display:grid;grid-template-columns:1fr 1.1fr;gap:104px;align-items:start}
+.np-form{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:16px 18px}
+.np-form[hidden]{display:none}
+.np-form label{display:flex;flex-direction:column;gap:7px;font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.np-form .full{grid-column:1/-1}
+.np-form input,.np-form select,.np-form textarea{font:500 1rem var(--sans);letter-spacing:normal;text-transform:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:13px 14px;width:100%}
+.np-form textarea{min-height:140px;resize:vertical}
+.np-form input:focus,.np-form select:focus,.np-form textarea:focus{outline:2px solid var(--gold);outline-offset:1px;border-color:transparent}
+.np-form .btn{justify-self:start;cursor:pointer}
+.np-form .btn:disabled{opacity:.6;cursor:wait}
+.form-note{grid-column:1/-1;font-size:.8rem;color:var(--muted)}
+.form-status{grid-column:1/-1;font-size:.92rem;color:var(--heading);font-weight:500}
+.form-status:empty{display:none}
+.form-status.bad{color:#c0392b}
+.np-form .trap{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.waitlist{grid-template-columns:1fr auto;align-items:end;margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
+@media (max-width:980px){.ask .wrap{grid-template-columns:1fr;gap:34px}}
+@media (max-width:560px){.np-form,.waitlist{grid-template-columns:1fr}}
 .plan{padding-top:60px}
 .plan .wrap{display:grid;grid-template-columns:1fr 1.1fr;gap:104px;align-items:start}
 .facts{display:grid;grid-template-columns:auto 1fr;gap:12px 24px;margin:30px 0 34px;font-size:.95rem}
@@ -608,9 +628,11 @@ footer{background:var(--navy-deep);color:#a9b6c0;padding:40px 0 34px;font-size:.
   var q = location.search;
   if (q) document.querySelectorAll('a[href^="/"]').forEach(function(a){ var h = a.getAttribute('href'), i = h.indexOf('#'); a.setAttribute('href', i < 0 ? h + q : h.slice(0, i) + q + h.slice(i)); });
   if (!p) return;
-  var act = NP.action(p, '/' + q + '#plan');
+  var act = NP.action(p, '/' + q + (NP.formsShow ? '#ask' : '#plan'));
   document.getElementById('hpBadge').innerHTML = NP.badge(p, act);
   document.getElementById('hpActions').innerHTML = act ? '<a class="' + (act.primary ? 'btn btn-gold' : 'link') + '" href="' + NP.esc(act.href) + '">' + act.label + '</a>' : '';
+  document.getElementById('hpActions').insertAdjacentHTML('afterend', NP.waitlistHtml(p));
+  document.querySelectorAll('[data-form]').forEach(NP.wireForm);
   if (act && act.online) document.querySelector('[data-book]').setAttribute('href', act.href);
 })();
 </script>

@@ -20,6 +20,10 @@ window.NP_SITE = {
   liveHosts: [],
   // Number guests text to book or ask about dates.
   text: { number: "+16178160401", approved: false },
+  // Where the contact form and the "notify me" waitlist send entries: the endpoint of a form
+  // service (for example Formspree) set up with the owner's email. Empty = previews show the
+  // forms but don't send; the launched site hides them until an endpoint is set and approved.
+  forms: { endpoint: "", approved: false },
   // Booking links must point to one of these hosts (checked by scripts/check-properties.mjs).
   bookingHosts: ["checkout.lodgify.com"]
 };

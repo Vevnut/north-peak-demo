@@ -323,6 +323,26 @@ section{padding:150px 0}
 .steps span{font-size:.92rem;color:var(--muted)}
 
 /* ---------- plan your stay ---------- */
+/* ---------- contact form and waitlist ---------- */
+.ask{padding:20px 0 120px}
+.ask .wrap{display:grid;grid-template-columns:1fr 1.1fr;gap:104px;align-items:start}
+.np-form{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:16px 18px}
+.np-form[hidden]{display:none}
+.np-form label{display:flex;flex-direction:column;gap:7px;font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.np-form .full{grid-column:1/-1}
+.np-form input,.np-form select,.np-form textarea{font:500 1rem var(--sans);letter-spacing:normal;text-transform:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:13px 14px;width:100%}
+.np-form textarea{min-height:140px;resize:vertical}
+.np-form input:focus,.np-form select:focus,.np-form textarea:focus{outline:2px solid var(--gold);outline-offset:1px;border-color:transparent}
+.np-form .btn{justify-self:start;cursor:pointer}
+.np-form .btn:disabled{opacity:.6;cursor:wait}
+.form-note{grid-column:1/-1;font-size:.8rem;color:var(--muted)}
+.form-status{grid-column:1/-1;font-size:.92rem;color:var(--heading);font-weight:500}
+.form-status:empty{display:none}
+.form-status.bad{color:#c0392b}
+.np-form .trap{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.waitlist{grid-template-columns:1fr auto;align-items:end;margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
+@media (max-width:980px){.ask .wrap{grid-template-columns:1fr;gap:34px}}
+@media (max-width:560px){.np-form,.waitlist{grid-template-columns:1fr}}
 .plan{padding-top:60px}
 .plan .wrap{display:grid;grid-template-columns:1fr 1.1fr;gap:104px;align-items:start}
 .facts{display:grid;grid-template-columns:auto 1fr;gap:12px 24px;margin:30px 0 34px;font-size:.95rem}
@@ -726,6 +746,30 @@ footer{background:var(--navy-deep);color:#a9b6c0;padding:40px 0 34px;font-size:.
     </div>
   </section>
 
+  <!-- CONTACT FORM: sends to NP_SITE.forms.endpoint (properties.js); hidden on the launched site until that is set and approved -->
+  <section class="ask" id="ask" hidden>
+    <div class="wrap">
+      <div data-stagger>
+        <div class="eyebrow rv">Questions?</div>
+        <h2 class="display rv">Send us a message</h2>
+        <p class="lead rv">Group trips, longer stays, pets, special occasions or anything else. We'll reply by email.</p>
+      </div>
+      <form class="np-form" data-form="contact" novalidate>
+        <input type="hidden" name="form" value="Contact">
+        <label>Name <input name="name" autocomplete="name" required></label>
+        <label>Email <input type="email" name="email" autocomplete="email" required></label>
+        <label>Phone (optional) <input type="tel" name="phone" autocomplete="tel"></label>
+        <label>Dates (optional) <input name="dates" placeholder="e.g. Feb 13 to 16"></label>
+        <label class="full">Home <select name="home" id="askHome"><option value="">Any home</option></select></label>
+        <label class="full">Message <textarea name="message" required></textarea></label>
+        <label class="trap" aria-hidden="true">Leave empty <input name="_gotcha" tabindex="-1" autocomplete="off"></label>
+        <button class="btn btn-gold" type="submit">Send message</button>
+        <p class="form-note">We use your details only to reply to you.</p>
+        <p class="form-status" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
   <!-- CTA -->
   <section class="cta dark">
     <div class="px" data-px="0.18" aria-hidden="true"><div class="px-layer"><img src="https://l.icdbcdn.com/oh/fff5d14a-1169-405a-b11f-c849669c79c4.jpg?w=2000" alt="" loading="lazy"></div></div>
@@ -803,7 +847,7 @@ footer{background:var(--navy-deep);color:#a9b6c0;padding:40px 0 34px;font-size:.
       '<span class="gal-count"></span></button><div class="thumbs"></div></div>' +
       '<div><h3>' + esc(p.name).replace(/-/g, '&#8209;') + '</h3><div class="meta">' + esc(meta(p)) + '</div><p>' + esc(p.summary) + '</p>' +
       '<ul class="specs">' + (p.features || []).map(function(f){ return '<li>' + esc(f) + '</li>'; }).join('') + '</ul>' +
-      (btns ? '<div class="actions">' + btns + '</div>' : '') + '</div></div>';
+      (btns ? '<div class="actions">' + btns + '</div>' : '') + NP.waitlistHtml(p) + '</div></div>';
   }
   (function renderHomes(){
     var panelsEl = document.getElementById('panels'), tabsBox = document.getElementById('tabs');
@@ -825,6 +869,15 @@ footer{background:var(--navy-deep);color:#a9b6c0;padding:40px 0 34px;font-size:.
       : words(soon) + (soon === 1 ? ' home' : ' homes') + ' opening on the mountain soon.';
   })();
   if (liveHost){ var demoTag = document.querySelector('.demo-tag'); if (demoTag) demoTag.remove(); }
+
+  /* ---------- contact form and waitlist (sending rules in site.js) ---------- */
+  (function setupForms(){
+    if (NP.formsShow){
+      document.getElementById('ask').hidden = false;
+      document.getElementById('askHome').insertAdjacentHTML('beforeend', HOMES.map(function(p){ return '<option>' + esc(p.name) + '</option>'; }).join(''));
+    } else document.getElementById('ask').remove();
+    document.querySelectorAll('[data-form]').forEach(NP.wireForm);
+  })();
 
   /* ---------- date search: hands dates and guests to the home's Lodgify checkout ---------- */
   (function setupBooking(){

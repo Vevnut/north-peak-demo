@@ -66,6 +66,10 @@ for (const [i, p] of (homes || []).entries()) {
 
 const usesText = (homes || []).some(p => p.status === 'text' || p.textAboutDates || (p.status === 'bookable' && !(p.booking && p.booking.approved)));
 if (usesText && !(site && site.text && site.text.approved === true)) pending.push('NP_SITE.text: texting number not yet approved for bookings');
+const forms = (site && site.forms) || {};
+if (forms.endpoint && !/^https:\/\//.test(forms.endpoint)) errors.push('NP_SITE.forms.endpoint must start with https://');
+if (!forms.endpoint) pending.push('NP_SITE.forms: no endpoint yet, so the contact form and waitlist are hidden on the launched site');
+else if (forms.approved !== true) pending.push('NP_SITE.forms: endpoint not yet approved by the owner');
 if (!site || !Array.isArray(site.liveHosts) || !site.liveHosts.length) pending.push('NP_SITE.liveHosts is empty (set it to the real domain on launch day)');
 
 // the page itself must not carry its own booking links: properties.js is the one place for them

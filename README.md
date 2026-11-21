@@ -78,3 +78,11 @@ The demo is hidden from search on purpose. The page already has its title, descr
    website link.
 
 `node scripts/check-properties.mjs --launch` lists each of these until it's done.
+
+### Contact form and waitlist
+
+The homepage has a contact form ("Send us a message"), and each upcoming home has an "Email me when it opens"
+waitlist, on the homepage and on its own page. Both send to `NP_SITE.forms.endpoint` in `properties.js`: the address
+of a form service set up with the owner's email (for example Formspree; free plans cover a small site). Until that is
+set, previews show the forms but don't send anything, and the launched site hides them. Set `approved: true` once the
+owner has tested it. A hidden field catches simple spam bots.

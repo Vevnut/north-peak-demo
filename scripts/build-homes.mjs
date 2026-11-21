@@ -208,9 +208,11 @@ ${others.map(o => `        <li><a href="${NP.pageUrl(o)}"><div class="hp-cover">
   var q = location.search;
   if (q) document.querySelectorAll('a[href^="/"]').forEach(function(a){ var h = a.getAttribute('href'), i = h.indexOf('#'); a.setAttribute('href', i < 0 ? h + q : h.slice(0, i) + q + h.slice(i)); });
   if (!p) return;
-  var act = NP.action(p, '/' + q + '#plan');
+  var act = NP.action(p, '/' + q + (NP.formsShow ? '#ask' : '#plan'));
   document.getElementById('hpBadge').innerHTML = NP.badge(p, act);
   document.getElementById('hpActions').innerHTML = act ? '<a class="' + (act.primary ? 'btn btn-gold' : 'link') + '" href="' + NP.esc(act.href) + '">' + act.label + '</a>' : '';
+  document.getElementById('hpActions').insertAdjacentHTML('afterend', NP.waitlistHtml(p));
+  document.querySelectorAll('[data-form]').forEach(NP.wireForm);
   if (act && act.online) document.querySelector('[data-book]').setAttribute('href', act.href);
 })();
 </script>
