@@ -309,7 +309,8 @@ section{padding:150px 0}
 .reviews .wrap{position:relative;z-index:1}
 .reviews-head{text-align:center;margin-bottom:72px}
 .stars{color:var(--gold);letter-spacing:.35em;font-size:1rem}
-.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:56px}
+.quotes{display:grid;grid-template-columns:repeat(2,1fr);gap:60px 72px;max-width:1120px;margin:0 auto;align-items:start}
+.reviews-src{margin-top:14px;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:#b9c4cc;font-weight:600}
 .quote{border-top:1px solid rgba(201,163,92,.55);padding-top:30px}
 .quote blockquote{font-family:var(--serif);font-size:1.5rem;line-height:1.38;color:#f4f1ea}
 .quote figcaption{margin-top:20px;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:#b9c4cc;font-weight:600}
@@ -628,19 +629,25 @@ footer{background:var(--navy-deep);color:#a9b6c0;padding:40px 0 34px;font-size:.
       <div class="reviews-head" data-stagger>
         <div class="stars rv" aria-label="5 out of 5 stars">★★★★★</div>
         <h2 class="display rv">What our guests say</h2>
+        <p class="reviews-src rv">Five-star reviews from Airbnb guests</p>
       </div>
+      <!-- real 5-star Airbnb reviews, from the screenshots on the owner's current site; "…" marks a shortened review -->
       <div class="quotes" data-stagger>
         <figure class="quote rv">
-          <blockquote>“This house truly felt like a dream house for us… You can really tell the owner put a lot of care into every detail of the house.”</blockquote>
+          <blockquote>“This house truly felt like a dream house for us… You can really tell the owner put a lot of care into every detail of the house. Sitting by the firepit and watching the kids play outside was one of our favorite moments during the trip.”</blockquote>
           <figcaption>Ediana &amp; Daniele · <span>Group trip</span></figcaption>
+        </figure>
+        <figure class="quote rv">
+          <blockquote>“We had such a wonderful night here with our two families and kids, creating unforgettable birthday memories for our kids. We also visited nearby Franconia Notch State Park the next morning. It’s really convenient! This house is amazing, and we will definitely come back in the fall!”</blockquote>
+          <figcaption>Haomiao · Boston, MA · <span>Stayed with kids</span></figcaption>
         </figure>
         <figure class="quote rv">
           <blockquote>“Absolutely stunning! Better than the pictures! The aesthetics were everything. We would definitely book again!”</blockquote>
           <figcaption>Sarae · Providence, RI · <span>Stayed with kids</span></figcaption>
         </figure>
         <figure class="quote rv">
-          <blockquote>“We had such a wonderful night here with our two families and kids… This house is amazing, and we will definitely come back in the fall!”</blockquote>
-          <figcaption>Haomiao · Boston, MA · <span>Stayed with kids</span></figcaption>
+          <blockquote>“Awesome house and location.”</blockquote>
+          <figcaption>Tyler · Marlborough, CT · <span>Group trip</span></figcaption>
         </figure>
       </div>
     </div>
