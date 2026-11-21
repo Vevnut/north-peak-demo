@@ -774,46 +774,16 @@ footer{background:var(--navy-deep);color:#a9b6c0;padding:40px 0 34px;font-size:.
 </footer>
 
 <script src="properties.js"></script>
+<script src="site.js"></script>
 <script>
 (function(){
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var nav = document.getElementById('nav');
 
   /* ---------- homes: built from properties.js, the one place each home is described ---------- */
-  var SITE = window.NP_SITE || {};
-  var HOMES = (window.NP_PROPERTIES || []).filter(function(p){ return p.status !== 'hidden'; });
-  var liveHost = (SITE.liveHosts || []).indexOf(location.hostname) > -1;
-  // On the launched site only owner-approved links and dates show. Previews also show pending
-  // ones so the demo stays complete; add ?as=live to a preview address to see the launch rules.
-  var LIVE = liveHost || new URLSearchParams(location.search).get('as') === 'live';
-  function ok(x){ return !!x && (x.approved === true || !LIVE); }
-  var TEXT = SITE.text || {}, textOk = !!TEXT.number && ok(TEXT);
-  function esc(v){ return String(v == null ? '' : v).replace(/[&<>"']/g, function(c){ return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
-  function sized(u, w){ return /\/\/l\.icdbcdn\.com\//.test(u) ? u + '?w=' + w : u; }
-  function plural(n, word){ return n + ' ' + word + (n === 1 ? '' : 's'); }
-  function words(n){ return ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten'][n] || String(n); }
-  function isOpen(p){ return p.status === 'bookable' || p.status === 'text'; }
-  // what the main button does, from the home's status and what the owner has approved
-  function action(p){
-    if (p.status === 'bookable' && p.booking && p.booking.url && ok(p.booking)) return { label: 'Book Now', href: p.booking.url, primary: true, online: true };
-    if (isOpen(p) && textOk) return { label: 'Text to Book', href: 'sms:' + TEXT.number, primary: true };
-    if (isOpen(p)) return { label: 'Contact Us', href: '#plan', primary: true };
-    if (p.textAboutDates && textOk) return { label: 'Text us about dates', href: 'sms:' + TEXT.number, primary: false };
-    return null;
-  }
-  function badge(p, act){
-    if (!isOpen(p)) return '<span class="badge">' + esc(p.opening && ok(p.opening) ? p.opening.label : 'Coming soon') + '</span>';
-    return '<span class="badge live">' + (act && act.online ? 'Now booking' : 'Open now') + '</span>';
-  }
-  function meta(p){
-    var m = [];
-    if (p.sleeps) m.push('Sleeps ' + p.sleeps);
-    m.push(plural(p.bedrooms, 'bedroom'));
-    if (p.beds) m.push(plural(p.beds, 'bed'));
-    m.push(plural(p.baths, 'bath'));
-    if (p.sqft) m.push(p.sqft.toLocaleString('en-US') + ' sq ft');
-    return m.join(' · ');
-  }
+  // shared rules (approvals, buttons, badges): site.js
+  var NP = window.NP, SITE = NP.SITE, HOMES = NP.HOMES, liveHost = NP.liveHost, LIVE = NP.LIVE, ok = NP.ok, TEXT = NP.TEXT, textOk = NP.textOk;
+  var esc = NP.esc, sized = NP.sized, plural = NP.plural, words = NP.words, isOpen = NP.isOpen, action = NP.action, badge = NP.badge, meta = NP.meta;
   var SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
   var I_BED = SVG + '<path d="M3 6v13M3 15h18v4M21 15v-3a3 3 0 0 0-3-3h-7v6M7 12.5a1.5 1.5 0 1 0 0-.01"/></svg>';
   var I_BATH = SVG + '<path d="M3 12h18v2a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5v-2zM6 12V6.5a2.5 2.5 0 0 1 5 0M7 19l-1 2M17 19l1 2"/></svg>';
@@ -824,7 +794,7 @@ footer{background:var(--navy-deep);color:#a9b6c0;padding:40px 0 34px;font-size:.
   }
   function panel(p, i){
     var act = action(p), ph = p.photos, rend = ph.kind === 'rendering';
-    var details = p.detailsUrl && !LIVE ? '<a class="btn btn-line" href="' + esc(p.detailsUrl) + '">Full Details</a>' : '';
+    var details = '<a class="btn btn-line" href="' + esc(NP.pageUrl(p) + location.search) + '">Full Details</a>';
     var main = act ? '<a class="' + (act.primary ? 'btn btn-gold' : 'link') + '" href="' + esc(act.href) + '">' + act.label + '</a>' : '';
     var btns = act && act.primary ? main + details : details + main;
     return '<div class="panel' + (i ? '' : ' active') + '" role="tabpanel" id="p' + i + '" aria-labelledby="t' + i + '">' +
@@ -843,7 +813,7 @@ footer{background:var(--navy-deep);color:#a9b6c0;padding:40px 0 34px;font-size:.
       return;
     }
     document.getElementById('homesMenu').innerHTML = HOMES.map(function(p, i){ return '<li><a href="#homes" data-home="' + i + '">' + esc(p.name) + ' ' + rooms(p) + '</a></li>'; }).join('');
-    document.getElementById('homesFooter').innerHTML = HOMES.map(function(p, i){ return '<li><a href="#homes" data-home="' + i + '">' + esc(p.name) + '</a></li>'; }).join('');
+    document.getElementById('homesFooter').innerHTML = HOMES.map(function(p){ return '<li><a href="' + esc(NP.pageUrl(p) + location.search) + '">' + esc(p.name) + '</a></li>'; }).join('');
     tabsBox.insertAdjacentHTML('afterbegin', HOMES.map(function(p, i){
       return '<button class="tab" role="tab" aria-selected="' + (i === 0) + '" aria-controls="p' + i + '" id="t' + i + '"' + (i ? ' tabindex="-1"' : '') + '>' + esc(p.name) + '</button>';
     }).join(''));

@@ -16,6 +16,9 @@ or the Vercel team will block the deployment.
 | Path | What it is |
 |---|---|
 | `index.html` | The whole page: HTML, CSS and JavaScript |
+| `homes/*.html` | One page per home (`/homes/<name>`), **built** from `properties.js`: don't edit by hand |
+| `site.js` | Rules shared by every page: approvals, booking buttons, badges |
+| `scripts/build-homes.mjs` | Builds the home pages (and `sitemap.xml` once the real domain is set) |
 | `properties.js` | **The one place each home is described**: details, status, booking link, photos |
 | `scripts/check-properties.mjs` | Checks `properties.js` before you push |
 | `img/logo-*.png` | Transparent logo files cut from the original logo |
@@ -29,8 +32,9 @@ Mountain View A-Frame photos (and the few other `.jpg` photos in `index.html`) s
 
 ## Adding or updating a home
 
-Everything about a home lives in `properties.js`. The page builds the Stay menu, the Our Homes tab and
-panel, the footer list and the photo gallery from it, so nothing in `index.html` needs to change.
+Everything about a home lives in `properties.js`. The homepage builds the Stay menu, the Our Homes tab and
+panel, the footer list and the photo gallery from it, and `scripts/build-homes.mjs` builds the home's own page
+(`/homes/<name>`, from its name), so nothing in `index.html` needs to change.
 
 1. Put the photos in `img/homes/` (for example `img/homes/lakeside-1.jpg`, `-2.jpg`, ...). The first one is the cover.
 2. Copy an existing entry in `properties.js`, give it a new `id`, and fill in the details and `photos.files`.
@@ -40,7 +44,8 @@ panel, the footer list and the photo gallery from it, so nothing in `index.html`
    - `"text"`: open, booked by text message.
    - `"bookable"`: open, booked online. Needs `booking.url`, copied from the owner's Lodgify account.
    - `"hidden"`: kept in the file but not shown.
-4. Run `node scripts/check-properties.mjs` and fix anything it reports.
+4. Run `node scripts/build-homes.mjs`, then `node scripts/check-properties.mjs`, and fix anything it reports.
+   Renaming a home changes its page address; add a redirect from the old one in `vercel.json`.
 5. Push to a branch, open the Vercel preview, and check the home both normally and with `?as=live` added to the address.
 
 ### Approvals
@@ -67,6 +72,8 @@ The demo is hidden from search on purpose. The page already has its title, descr
 1. Remove `<meta name="robots" content="noindex, nofollow">` from `index.html`, the `X-Robots-Tag` header from
    `vercel.json`, and change `robots.txt` to `Allow: /`, once the real domain is connected (the canonical link below keeps the vercel.app copy out of results).
 2. Add `<link rel="canonical">` and `og:url` with the real domain, and point `og:image` and the schema `image` at it.
+   Then run `node scripts/build-homes.mjs`: the home pages pick up the same domain and it writes `sitemap.xml`.
+   Submit that sitemap in Search Console.
 3. Add the domain to Google Search Console and Bing Webmaster Tools, and update the Google Business Profile's
    website link.
 

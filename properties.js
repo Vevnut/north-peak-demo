@@ -2,7 +2,7 @@
  *
  * The page builds the Stay menu, the Our Homes tabs and panels, the footer list and the
  * photo galleries from this file. To add a home: copy an entry, give it a new id, add its
- * photos, then run  node scripts/check-properties.mjs  before pushing.
+ * photos, then run  node scripts/build-homes.mjs  and  node scripts/check-properties.mjs  before pushing.
  *
  * status
  *   "bookable"  open, booked online through booking.url
@@ -32,9 +32,7 @@ window.NP_PROPERTIES = [
     bedrooms: 5, baths: 4, beds: 9, sleeps: 13, sqft: null,
     summary: "A stunning A-frame with soaring 30-foot ceilings and dramatic floor-to-ceiling windows. Take in the mountain views, soak in the private hot tub, and unwind on the deck under the stars. Perfect for groups and families.",
     features: ["Private hot tub", "Mountain views", "Fire pit", "Pets welcome", "Dedicated workspace", "Full kitchen"],
-    booking: { url: "https://checkout.lodgify.com/en/northpeakstay/807795/reservation?currency=USD", approved: false },
-    // Old Lodgify page; shown on previews only, since it stops working once the domain moves.
-    detailsUrl: "https://staynorthpeak.com/en/overview",
+    booking: { url: "https://checkout.lodgify.com/en/northpeakstay/807795/reservation?currency=USD", approved: false },
     photos: {
       kind: "photo",
       coverAlt: "Mountain View A-Frame open living room and kitchen",
@@ -91,8 +89,7 @@ window.NP_PROPERTIES = [
     bedrooms: 5, baths: 4, sqft: 4000,
     summary: "Our largest home, tucked into the trees with a sauna, hot tub and a playground for the kids. Made for big family trips and friends' weekends.",
     features: ["Sauna", "Hot tub", "Kids playground", "Fire pit", "Outdoor living space", "4,000 sq ft"],
-    booking: null,
-    detailsUrl: "https://staynorthpeak.com/en/custom-page-name",
+    booking: null,
     photos: { kind: "rendering", files: [
       "img/homes/forest-1.jpg",
       "img/homes/forest-2.jpg",
@@ -110,8 +107,7 @@ window.NP_PROPERTIES = [
     bedrooms: 3, baths: 3, sqft: 2000,
     summary: "A clean-lined modern barn with a private hot tub, fire pit and playground, sized just right for two families sharing a getaway.",
     features: ["Private hot tub", "Fire pit", "Kids playground", "Outdoor living space"],
-    textAboutDates: true,
-    detailsUrl: "https://staynorthpeak.com/en/custom-page-name1",
+    textAboutDates: true,
     photos: { kind: "rendering", files: [
       "img/homes/barn-1.jpg",
       "img/homes/barn-2.jpg",
@@ -130,8 +126,7 @@ window.NP_PROPERTIES = [
     bedrooms: 2, baths: 2, sqft: 1200,
     summary: "A warm, wood-lined cabin for couples or a small family, with its own hot tub and a fire pit for long mountain evenings.",
     features: ["Private hot tub", "Fire pit", "Outdoor living space", "1,200 sq ft"],
-    textAboutDates: true,
-    detailsUrl: "https://staynorthpeak.com/en/cozy-barn-cabin",
+    textAboutDates: true,
     photos: { kind: "rendering", files: [
       "img/homes/cozy-1.jpg",
       "img/homes/cozy-2.jpg",
@@ -148,8 +143,7 @@ window.NP_PROPERTIES = [
     bedrooms: 2, baths: 1, sqft: 800,
     summary: "A striking half A-frame with big glass and a small footprint: an easy, romantic escape with a hot tub just outside the door.",
     features: ["Private hot tub", "Fire pit", "Outdoor living space", "800 sq ft"],
-    textAboutDates: true,
-    detailsUrl: "https://staynorthpeak.com/en/half-a-frame-2b1b",
+    textAboutDates: true,
     photos: { kind: "rendering", files: [
       "img/homes/half-1.jpg",
       "img/homes/half-2.jpg",

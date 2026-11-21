@@ -1,4 +1,5 @@
 {
+  "cleanUrls": true,
   "headers": [
     {
       "source": "/(.*)",
@@ -7,11 +8,11 @@
   ],
   "redirects": [
     { "source": "/en", "destination": "/", "permanent": false },
-    { "source": "/en/overview", "destination": "/#homes", "permanent": false },
-    { "source": "/en/custom-page-name", "destination": "/#homes", "permanent": false },
-    { "source": "/en/custom-page-name1", "destination": "/#homes", "permanent": false },
-    { "source": "/en/cozy-barn-cabin", "destination": "/#homes", "permanent": false },
-    { "source": "/en/half-a-frame-2b1b", "destination": "/#homes", "permanent": false },
+    { "source": "/en/overview", "destination": "/homes/mountain-view-a-frame", "permanent": false },
+    { "source": "/en/custom-page-name", "destination": "/homes/forest-a-frame", "permanent": false },
+    { "source": "/en/custom-page-name1", "destination": "/homes/modern-barn", "permanent": false },
+    { "source": "/en/cozy-barn-cabin", "destination": "/homes/cozy-barn-cabin", "permanent": false },
+    { "source": "/en/half-a-frame-2b1b", "destination": "/homes/half-a-frame", "permanent": false },
     { "source": "/en/experiences", "destination": "/#experiences", "permanent": false },
     { "source": "/en/reviews1", "destination": "/#reviews", "permanent": false },
     { "source": "/en/construction", "destination": "/#build", "permanent": false },

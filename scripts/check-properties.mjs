@@ -8,6 +8,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import vm from 'node:vm';
+import { stalePages } from './build-homes.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const launch = process.argv.includes('--launch');
@@ -61,9 +62,6 @@ for (const [i, p] of (homes || []).entries()) {
   }
   if (p.status === 'upcoming' && p.booking && p.booking.url) err('an "upcoming" home must not have a booking link');
   if (p.status === 'upcoming' && p.opening && p.opening.approved !== true) pending.push(`${who}: opening date "${p.opening.label}" not yet approved`);
-  if (p.status !== 'hidden' && p.detailsUrl && /staynorthpeak\.com/.test(p.detailsUrl)) {
-    pending.push(`${who}: detailsUrl points at the old Lodgify site, which stops working once the domain moves (hidden on the live site)`);
-  }
 }
 
 const usesText = (homes || []).some(p => p.status === 'text' || p.textAboutDates || (p.status === 'bookable' && !(p.booking && p.booking.approved)));
@@ -71,7 +69,8 @@ if (usesText && !(site && site.text && site.text.approved === true)) pending.pus
 if (!site || !Array.isArray(site.liveHosts) || !site.liveHosts.length) pending.push('NP_SITE.liveHosts is empty (set it to the real domain on launch day)');
 
 // the page itself must not carry its own booking links: properties.js is the one place for them
-const html = readFileSync(path.join(root, 'index.html'), 'utf8');
+// HTML comments (launch-day notes) are left out so they don't count as the real tags
+const html = readFileSync(path.join(root, 'index.html'), 'utf8').replace(/<!--[sS]*?-->/g, '');
 if (/checkout\.lodgify\.com/.test(html)) errors.push('index.html has a hard-coded Lodgify checkout link; move it into properties.js');
 
 // search engines: the demo is deliberately hidden; these are the switches to flip on launch day
@@ -84,6 +83,10 @@ if (/vercel\.app/.test(html)) pending.push('SEO: index.html share image / schema
 for (const m of html.matchAll(/https:\/\/[^"]*?vercel\.app\/([^"]+)"/g)) {
   if (!existsSync(path.join(root, m[1]))) errors.push(`index.html links a file that does not exist: ${m[1]}`);
 }
+
+// each home's page (homes/*.html) is built from properties.js and must match it
+for (const f of stalePages()) errors.push(`${f} is out of date: run  node scripts/build-homes.mjs`);
+if (!existsSync(path.join(root, 'sitemap.xml'))) pending.push('SEO: no sitemap.xml yet (build-homes writes it once index.html has its canonical link)');
 
 const shown = (homes || []).filter(p => p.status !== 'hidden').length;
 console.log(`Checked ${(homes || []).length} homes (${shown} shown).`);
