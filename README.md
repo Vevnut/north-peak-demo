@@ -17,6 +17,8 @@ or the Vercel team will block the deployment.
 |---|---|
 | `index.html` | The whole page: HTML, CSS and JavaScript |
 | `homes/*.html` | One page per home (`/homes/<name>`), **built** from `properties.js`: don't edit by hand |
+| `guide.js` | **The local guide**: every spot, its photo, credit and category; the homepage tabs and the guide pages both use it |
+| `guide/*.html` | One page per guide category (`/guide/<slug>`), **built** from `guide.js` |
 | `site.js` | Rules shared by every page: approvals, booking buttons, badges |
 | `scripts/build-homes.mjs` | Builds the home pages (and `sitemap.xml` once the real domain is set) |
 | `properties.js` | **The one place each home is described**: details, status, booking link, photos |
@@ -101,3 +103,12 @@ The owner should read it before launch; set `NP_SITE.privacy.approved` to `true`
 - `404.html` (built by `scripts/build-homes.mjs`) is what Vercel shows for any address that doesn't exist.
 - Every page loads Vercel Web Analytics (`/_vercel/insights/script.js`): cookie-free page-view counts, switched on in
   the Vercel project's Analytics tab. The privacy policy mentions it. If it's ever switched off, remove the script tags.
+
+### Local guide pages
+
+`guide.js` holds the local guide. The homepage's Local guide tabs and four pages built from it
+(`/guide/ski-mountains-near-campton-nh`, `/guide/family-things-to-do-near-campton-nh`,
+`/guide/hikes-and-waterfalls-near-campton-nh`, `/guide/restaurants-near-campton-nh`) all read it, so a spot is edited once.
+Each page has its own title and description for search, the spots with photos and credits, links to the other guides and
+the homes. To add a spot, copy one in `guide.js` (a Wikimedia photo needs its `credit`), then run
+`node scripts/build-homes.mjs` and `node scripts/check-properties.mjs`.

@@ -74,6 +74,24 @@ window.NP = (function(){
     if (p.sqft) m.push(p.sqft.toLocaleString('en-US') + ' sq ft');
     return m.join(' · ');
   }
+  /* ---------- local guide (guide.js) ---------- */
+  var GUIDE = window.NP_GUIDE || [];
+  var I_FORK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><path d="M7 3v8M5 3v5a2 2 0 004 0V3M7 11v10M16 3c-2 1.5-2.5 4-2.5 7h2.5v11"/></svg>';
+  function guideUrl(c){ return '/guide/' + c.slug; }
+  // one spot card; base = '' on the homepage, '/' on pages in folders (so image paths still work)
+  function spotHtml(s, base){
+    base = base || '';
+    var img = s.photo
+      ? '<div class="spot-img' + (s.logo ? ' has-logo' : '') + '"><img class="ph" src="' + esc(base + s.photo) + '" alt="' + esc(s.photoAlt) + '" loading="lazy">' +
+        (s.logo ? '<img class="spot-logo" src="' + esc(base + s.logo) + '" alt="' + esc(s.logoAlt) + '" loading="lazy">' : '') + '</div>'
+      : '<div class="spot-img no-photo">' + I_FORK + '</div>';
+    return '<li class="spot">' + img + '<div class="spot-body"><div class="spot-top"><h3>' + esc(s.name) + '</h3><span class="tag">' + esc(s.tag) + '</span></div>' +
+      '<p>' + esc(s.text) + '</p><div class="spot-foot"><span>' + esc(s.where) + '</span><a href="' + esc(s.link.href) + '" target="_blank" rel="noopener">' + esc(s.link.label) + '</a></div></div></li>';
+  }
+  function creditHtml(s){
+    var c = s.credit;
+    return '<li>' + esc(c.place) + ': ' + esc(c.author) + ', <a href="' + esc(c.source) + '" target="_blank" rel="noopener">' + esc(c.license) + '</a></li>';
+  }
   /* ---------- full-screen photo viewer (homepage galleries and home pages) ---------- */
   var lb = null, lbImg, lbStrip, cur = { g: null, i: 0 }, lastFocus = null, loadToken = 0;
   var reduce = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -156,5 +174,6 @@ window.NP = (function(){
   }
   return { SITE: SITE, HOMES: HOMES, liveHost: liveHost, LIVE: LIVE, ok: ok, TEXT: TEXT, textOk: textOk,
     esc: esc, sized: sized, plural: plural, words: words, isOpen: isOpen, slug: slug, pageUrl: pageUrl,
-    action: action, badge: badge, meta: meta, formsShow: formsShow, waitlistHtml: waitlistHtml, wireForm: wireForm, openLightbox: openLightbox };
+    action: action, badge: badge, meta: meta, formsShow: formsShow, waitlistHtml: waitlistHtml, wireForm: wireForm, openLightbox: openLightbox,
+    GUIDE: GUIDE, guideUrl: guideUrl, spotHtml: spotHtml, creditHtml: creditHtml };
 })();

@@ -1,5 +1,6 @@
 // Builds one page per home (homes/<name>.html, served at /homes/<name>) from properties.js,
-// the privacy policy (privacy.html, at /privacy), and sitemap.xml once index.html has its canonical link.
+// a page per local guide category (guide/<slug>.html, from guide.js), the privacy policy (privacy.html),
+// the 404 page, and sitemap.xml once index.html has its canonical link.
 //
 //   node scripts/build-homes.mjs          write the pages
 //   node scripts/build-homes.mjs --check  only report pages that are out of date (used by check-properties)
@@ -17,6 +18,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export function buildPages() {
   const sandbox = { window: {}, location: { hostname: '', search: '' }, URLSearchParams };
   vm.runInNewContext(readFileSync(path.join(root, 'properties.js'), 'utf8'), sandbox);
+  vm.runInNewContext(readFileSync(path.join(root, 'guide.js'), 'utf8'), sandbox);
   vm.runInNewContext(readFileSync(path.join(root, 'site.js'), 'utf8'), sandbox);
   const NP = sandbox.window.NP;
   const index = readFileSync(path.join(root, 'index.html'), 'utf8').replace(/\r\n/g, '\n');
@@ -327,8 +329,95 @@ ${homes.map(o => `      <li><a href="${NP.pageUrl(o)}"><div class="hp-cover"><im
   missing = missing.replace('.legal-page{max-width:760px}', '.legal-page{max-width:760px}\n.nf-homes{margin:28px 0 34px}\n.legal-page .nf-homes{padding-left:0}');
   pages['404.html'] = missing;
 
+  // ---------- local guide pages (/guide/<slug>), one per category in guide.js ----------
+  const SCHEMA_TYPE = { ski: 'SkiResort', eat: 'Restaurant' };
+  for (const c of NP.GUIDE) {
+    const gurl = NP.guideUrl(c), others = NP.GUIDE.filter(o => o !== c);
+    const credited = c.spots.filter(s => s.credit);
+    const gschema = {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'ItemList',
+          name: c.heading,
+          ...(canonical ? { url: canonical + gurl } : {}),
+          itemListElement: c.spots.map((s, i) => ({ '@type': 'ListItem', position: i + 1,
+            item: { '@type': SCHEMA_TYPE[c.id] || 'TouristAttraction', name: s.name, description: s.text } })),
+        },
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'North Peak Stays', ...(canonical ? { item: canonical + '/' } : {}) },
+            { '@type': 'ListItem', position: 2, name: c.heading, ...(canonical ? { item: canonical + gurl } : {}) },
+          ],
+        },
+      ],
+    };
+    let page = privacy;
+    [pre, post] = cut(page, '<title>', '<link rel="icon"');
+    page = pre + `<title>${esc(c.heading)} | North Peak Stays</title>
+<meta name="description" content="${esc(c.intro)}">
+${noindex ? '<meta name="robots" content="noindex, nofollow">\n' : ''}${canonical ? `<link rel="canonical" href="${canonical}${gurl}">\n<meta property="og:url" content="${canonical}${gurl}">\n` : ''}<meta property="og:type" content="article">
+<meta property="og:site_name" content="North Peak Stays">
+<meta property="og:title" content="${esc(c.heading)}">
+<meta property="og:description" content="${esc(c.intro)}">
+${shareOrigin && c.spots[0].photo ? `<meta property="og:image" content="${esc(abs(c.spots[0].photo, 1600))}">\n` : ''}<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+${JSON.stringify(gschema, null, 2)}
+</script>
+` + post;
+    [pre, post] = cut(page, '<main class="hp-main">', '</main>');
+    page = pre + `<main class="hp-main">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">North Peak Stays</a> › <a href="/#experiences">Local guide</a> › <span aria-current="page">${esc(c.label)}</span></nav>
+    <div class="gp-head">
+      <div class="eyebrow">Local guide · ${esc(c.label)}</div>
+      <h1>${esc(c.heading)}</h1>
+      <p>${esc(c.intro)}</p>
+    </div>
+    <ul class="spots gp-spots">
+${c.spots.map(s => '      ' + NP.spotHtml(s, '/')).join('\n')}
+    </ul>
+    <p class="guide-note">Drive times are approximate from North Peak. Hours and seasons change, so check before you go.</p>
+
+    <section class="hp-section" aria-labelledby="more-guides">
+      <h2 id="more-guides">More of the local guide</h2>
+      <ul class="gp-more">
+${others.map(o => `        <li><a href="${NP.guideUrl(o)}"><span class="eyebrow">${esc(o.label)}</span>${esc(o.heading)}</a></li>`).join('\n')}
+      </ul>
+    </section>
+
+    <section class="hp-section" aria-labelledby="stay">
+      <h2 id="stay">Stay at North Peak</h2>
+      <p class="note">Modern A-frames and barn cabins in Campton, with private hot tubs and mountain views.</p>
+      <ul class="hp-others">
+${homes.map(o => `        <li><a href="${NP.pageUrl(o)}"><div class="hp-cover"><img src="${esc(src(o.photos.files[0], 800))}" alt="${esc(o.photos.coverAlt || o.name)}" loading="lazy"></div><h3>${esc(o.name)}</h3><span>${esc(NP.meta(o))}</span></a></li>`).join('\n')}
+      </ul>
+    </section>
+${credited.length || c.spots.some(s => s.logo) ? `
+    <details class="credits gp-credits">
+      <summary>Photo credits</summary>
+      <ul>
+${credited.map(s => '        ' + NP.creditHtml(s)).join('\n')}
+        <li>Photos via Wikimedia Commons, resized.${c.spots.some(s => s.logo) ? ' Ski area logos belong to their resorts and are shown to identify them.' : ''}</li>
+      </ul>
+    </details>` : ''}
+  </div>
+` + post;
+    page = page.replace('.legal-page{max-width:760px}', `.legal-page{max-width:760px}
+.gp-head{max-width:760px;margin-bottom:40px}
+.gp-head h1{font-family:var(--serif);font-weight:500;font-size:clamp(2.4rem,4.6vw,3.8rem);line-height:1.04;color:var(--heading);margin:8px 0 16px}
+.gp-head p{color:var(--muted);font-size:1.05rem}
+.gp-more{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.gp-more a{display:block;padding:20px 22px;border:1px solid var(--line);border-radius:12px;text-decoration:none;color:var(--heading);font-family:var(--serif);font-size:1.3rem;line-height:1.25}
+.gp-more a:hover{border-color:var(--gold)}
+.gp-more .eyebrow{display:block;margin-bottom:6px}
+.gp-credits{margin-top:60px}`);
+    pages['guide/' + c.slug + '.html'] = page;
+  }
+
   if (canonical) {
-    const urls = ['/', ...homes.map(p => NP.pageUrl(p)), '/privacy'];
+    const urls = ['/', ...homes.map(p => NP.pageUrl(p)), ...NP.GUIDE.map(c => NP.guideUrl(c)), '/privacy'];
     pages['sitemap.xml'] = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(u => `  <url><loc>${canonical}${u}</loc></url>`).join('\n')}\n</urlset>\n`;
   }
   return pages;
@@ -341,8 +430,10 @@ export function stalePages() {
     const p = path.join(root, f);
     if (!existsSync(p) || readFileSync(p, 'utf8').replace(/\r\n/g, '\n') !== html) out.push(f);
   }
-  const dir = path.join(root, 'homes');
-  if (existsSync(dir)) for (const f of readdirSync(dir)) if (!pages['homes/' + f]) out.push('homes/' + f + ' (no longer a home)');
+  for (const d of ['homes', 'guide']) {
+    const dir = path.join(root, d);
+    if (existsSync(dir)) for (const f of readdirSync(dir)) if (!pages[d + '/' + f]) out.push(d + '/' + f + ' (no longer built)');
+  }
   return out;
 }
 
@@ -353,8 +444,10 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     process.exit(s.length ? 1 : 0);
   }
   const pages = buildPages();
-  mkdirSync(path.join(root, 'homes'), { recursive: true });
-  for (const f of readdirSync(path.join(root, 'homes'))) if (!pages['homes/' + f]) unlinkSync(path.join(root, 'homes', f));
+  for (const d of ['homes', 'guide']) {
+    mkdirSync(path.join(root, d), { recursive: true });
+    for (const f of readdirSync(path.join(root, d))) if (!pages[d + '/' + f]) unlinkSync(path.join(root, d, f));
+  }
   if (!pages['sitemap.xml'] && existsSync(path.join(root, 'sitemap.xml'))) unlinkSync(path.join(root, 'sitemap.xml'));
   for (const [f, html] of Object.entries(pages)) writeFileSync(path.join(root, f), html);
   console.log('Wrote ' + Object.keys(pages).join(', '));

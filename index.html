@@ -266,6 +266,7 @@ section{padding:150px 0}
 
 /* local guide */
 .guide{margin-top:56px}
+.guide-more{margin-top:26px}
 .guide-head{display:flex;justify-content:space-between;align-items:end;gap:20px 40px;flex-wrap:wrap;margin-bottom:30px}
 .chips{display:flex;gap:8px;flex-wrap:wrap}
 .chip{border:1px solid var(--line);background:transparent;color:var(--muted);padding:.65rem 1.15rem;border-radius:999px;font:600 .68rem var(--sans);letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:background-color .3s,color .3s,border-color .3s}
@@ -604,73 +605,15 @@ footer{background:var(--navy-deep);color:#a9b6c0;padding:40px 0 34px;font-size:.
       <!-- local guide: one tab per category -->
       <div class="guide" data-stagger>
         <div class="guide-head">
-          <div class="chips rv" role="tablist" aria-label="Local guide" id="chips">
-            <button class="chip" role="tab" aria-selected="true" aria-controls="g0" id="gt0">Ski mountains</button>
-            <button class="chip" role="tab" aria-selected="false" aria-controls="g1" id="gt1" tabindex="-1">Family fun</button>
-            <button class="chip" role="tab" aria-selected="false" aria-controls="g2" id="gt2" tabindex="-1">Outdoors</button>
-            <button class="chip" role="tab" aria-selected="false" aria-controls="g3" id="gt3" tabindex="-1">Eat &amp; drink</button>
-          </div>
+          <div class="chips rv" role="tablist" aria-label="Local guide" id="chips"></div>
         </div>
 
-        <div class="guide-panels rv">
-          <div class="gpanel active" role="tabpanel" id="g0" aria-labelledby="gt0">
-            <ul class="spots">
-              <li class="spot"><div class="spot-img has-logo"><img class="ph" src="img/guide/waterville.jpg" alt="Waterville Valley Resort base area and slopes" loading="lazy"><img class="spot-logo" src="img/guide/logo-waterville.png" alt="Waterville Valley Resort logo" loading="lazy"></div><div class="spot-body"><div class="spot-top"><h3>Waterville Valley Resort</h3><span class="tag">All ages</span></div><p>Family-friendly trails, lessons for every level and night skiing, with a full resort village at the base.</p><div class="spot-foot"><span>About 20 min · Waterville Valley</span><a href="https://www.google.com/maps/search/?api=1&query=Waterville+Valley+Resort+NH" target="_blank" rel="noopener">Map</a></div></div></li>
-              <li class="spot"><div class="spot-img has-logo"><img class="ph" src="img/guide/loon.jpg" alt="Chairlift on Loon Mountain's North Peak in winter" loading="lazy"><img class="spot-logo" src="img/guide/logo-loon.png" alt="Loon Mountain logo" loading="lazy"></div><div class="spot-body"><div class="spot-top"><h3>Loon Mountain</h3><span class="tag">All ages</span></div><p>Big-mountain skiing across three peaks with a scenic gondola, plus summer adventures when the snow melts.</p><div class="spot-foot"><span>About 25 min · Lincoln</span><a href="https://www.google.com/maps/search/?api=1&query=Loon+Mountain+Resort+Lincoln+NH" target="_blank" rel="noopener">Map</a></div></div></li>
-              <li class="spot"><div class="spot-img has-logo"><img class="ph" src="img/guide/tenney.jpg" alt="Upper Racer trail at Tenney Mountain" loading="lazy"><img class="spot-logo" src="img/guide/logo-tenney.png" alt="Tenney Mountain logo" loading="lazy"></div><div class="spot-body"><div class="spot-top"><h3>Tenney Mountain</h3><span class="tag">Families</span></div><p>A laid-back local hill with snow tubing and terrain parks, a great pick for beginners and young kids.</p><div class="spot-foot"><span>About 20 min · Plymouth</span><a href="https://www.google.com/maps/search/?api=1&query=Tenney+Mountain+Plymouth+NH" target="_blank" rel="noopener">Map</a></div></div></li>
-              <li class="spot"><div class="spot-img has-logo"><img class="ph" src="img/guide/cannon.jpg" alt="Skiers at Cannon Mountain with Mount Lafayette behind" loading="lazy"><img class="spot-logo" src="img/guide/logo-cannon.png" alt="Cannon Mountain logo" loading="lazy"></div><div class="spot-body"><div class="spot-top"><h3>Cannon Mountain</h3><span class="tag">Experienced</span></div><p>Steep, classic New England terrain with sweeping views over Franconia Notch.</p><div class="spot-foot"><span>About 35 min · Franconia Notch</span><a href="https://www.google.com/maps/search/?api=1&query=Cannon+Mountain+Franconia+NH" target="_blank" rel="noopener">Map</a></div></div></li>
-            </ul>
-          </div>
-
-          <div class="gpanel" role="tabpanel" id="g1" aria-labelledby="gt1">
-            <ul class="spots">
-              <li class="spot"><div class="spot-img"><img class="ph" src="img/site/railbikes-900.jpg" alt="Rail bikes crossing an iron bridge" loading="lazy"></div><div class="spot-body"><div class="spot-top"><h3>Granite State Railway</h3><span class="tag">All ages</span></div><p>Pedal motor-assisted rail bikes along a scenic stretch of historic track through the forest.</p><div class="spot-foot"><span>Book ahead online</span><a href="https://gsscenic.com/" target="_blank" rel="noopener">Tickets</a></div></div></li>
-              <li class="spot"><div class="spot-img"><img class="ph" src="img/guide/squam.jpg" alt="Squam Lake from above" loading="lazy"></div><div class="spot-body"><div class="spot-top"><h3>Squam Lakes Natural Science Center</h3><span class="tag">All ages</span></div><p>A live animal trail with black bears, mountain lions and bald eagles, plus seasonal lake cruises.</p><div class="spot-foot"><span>About 15 min · Holderness</span><a href="https://www.google.com/maps/search/?api=1&query=Squam+Lakes+Natural+Science+Center+Holderness+NH" target="_blank" rel="noopener">Map</a></div></div></li>
-              <li class="spot"><div class="spot-img"><img class="ph" src="img/guide/clarks.jpg" alt="Clark's Trading Post sign in Lincoln" loading="lazy"></div><div class="spot-body"><div class="spot-top"><h3>Clark's Bears</h3><span class="tag">Kids</span></div><p>Trained bear shows, a steam train and old-time attractions, run by the Clark family since 1949.</p><div class="spot-foot"><span>About 25 min · Lincoln</span><a href="https://www.google.com/maps/search/?api=1&query=Clark%27s+Bears+Lincoln+NH" target="_blank" rel="noopener">Map</a></div></div></li>
-              <li class="spot"><div class="spot-img"><img class="ph" src="img/guide/whales-tale.jpg" alt="Whale's Tale Waterpark" loading="lazy"></div><div class="spot-body"><div class="spot-top"><h3>Whale's Tale Waterpark</h3><span class="tag">All ages</span></div><p>A giant wave pool, water slides and a lazy river for hot summer days.</p><div class="spot-foot"><span>About 25 min · Lincoln · Summer</span><a href="https://www.google.com/maps/search/?api=1&query=Whale%27s+Tale+Waterpark+Lincoln+NH" target="_blank" rel="noopener">Map</a></div></div></li>
-              <li class="spot"><div class="spot-img"><img class="ph" src="img/guide/polar-caves.jpg" alt="White fallow deer at the Polar Caves animal exhibit" loading="lazy"></div><div class="spot-body"><div class="spot-top"><h3>Polar Caves Park</h3><span class="tag">Kids</span></div><p>Nine glacial caves to squeeze through, nature trails and animals to feed.</p><div class="spot-foot"><span>About 20 min · Rumney</span><a href="https://www.google.com/maps/search/?api=1&query=Polar+Caves+Park+Rumney+NH" target="_blank" rel="noopener">Map</a></div></div></li>
-            </ul>
-          </div>
-
-          <div class="gpanel" role="tabpanel" id="g2" aria-labelledby="gt2">
-            <ul class="spots">
-              <li class="spot"><div class="spot-img"><img class="ph" src="img/guide/flume.jpg" alt="Boardwalk through Flume Gorge" loading="lazy"></div><div class="spot-body"><div class="spot-top"><h3>Flume Gorge</h3><span class="tag">All ages</span></div><p>A two-mile walkway through a granite gorge at the base of Mount Liberty. Book tickets online ahead.</p><div class="spot-foot"><span>About 30 min · Franconia Notch</span><a href="https://www.google.com/maps/search/?api=1&query=Flume+Gorge+Lincoln+NH" target="_blank" rel="noopener">Map</a></div></div></li>
-              <li class="spot"><div class="spot-img"><img class="ph" src="img/guide/kancamagus.jpg" alt="Fall foliage along the Kancamagus Highway" loading="lazy"></div><div class="spot-body"><div class="spot-top"><h3>Kancamagus Highway</h3><span class="tag">All ages</span></div><p>New England's famous scenic drive, with waterfalls and overlooks. Unforgettable in foliage season.</p><div class="spot-foot"><span>About 25 min · Starts in Lincoln</span><a href="https://www.google.com/maps/search/?api=1&query=Kancamagus+Highway+Lincoln+NH" target="_blank" rel="noopener">Map</a></div></div></li>
-              <li class="spot"><div class="spot-img"><img class="ph" src="img/guide/welch-dickey.jpg" alt="Welch and Dickey mountains seen from Campton" loading="lazy"></div><div class="spot-body"><div class="spot-top"><h3>Welch–Dickey Loop</h3><span class="tag">Teens &amp; adults</span></div><p>A favorite half-day hike with open granite ledges and big views of the valley.</p><div class="spot-foot"><span>About 15 min · Thornton</span><a href="https://www.google.com/maps/search/?api=1&query=Welch+Dickey+Loop+Trailhead+Thornton+NH" target="_blank" rel="noopener">Map</a></div></div></li>
-              <li class="spot"><div class="spot-img"><img class="ph" src="img/guide/lost-river.jpg" alt="Waterfall and platform at Lost River Gorge" loading="lazy"></div><div class="spot-body"><div class="spot-top"><h3>Lost River Gorge</h3><span class="tag">All ages</span></div><p>Boardwalks, waterfalls and boulder caves to explore in Kinsman Notch.</p><div class="spot-foot"><span>About 30 min · North Woodstock</span><a href="https://www.google.com/maps/search/?api=1&query=Lost+River+Gorge+%26+Boulder+Caves+NH" target="_blank" rel="noopener">Map</a></div></div></li>
-            </ul>
-          </div>
-
-          <div class="gpanel" role="tabpanel" id="g3" aria-labelledby="gt3">
-            <ul class="spots">
-              <li class="spot"><div class="spot-img no-photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><path d="M7 3v8M5 3v5a2 2 0 004 0V3M7 11v10M16 3c-2 1.5-2.5 4-2.5 7h2.5v11"/></svg></div><div class="spot-body"><div class="spot-top"><h3>Mad River Tavern</h3><span class="tag">Close by</span></div><p>A hearty New England menu and live music, just down the road.</p><div class="spot-foot"><span>Campton</span><a href="https://www.google.com/maps/search/?api=1&query=Mad+River+Tavern+Campton+NH" target="_blank" rel="noopener">Map</a></div></div></li>
-              <li class="spot"><div class="spot-img"><img class="ph" src="img/guide/blair-bridge.jpg" alt="The Blair covered bridge in Campton" loading="lazy"></div><div class="spot-body"><div class="spot-top"><h3>Covered Bridge Farm Table</h3><span class="tag">Date night</span></div><p>Farm-to-table dining overlooking the Pemigewasset River and the Blair covered bridge.</p><div class="spot-foot"><span>Campton</span><a href="https://www.google.com/maps/search/?api=1&query=Covered+Bridge+Farm+Table+Campton+NH" target="_blank" rel="noopener">Map</a></div></div></li>
-              <li class="spot"><div class="spot-img"><img class="ph" src="img/guide/woodstock-inn.jpg" alt="Woodstock Inn Brewery in North Woodstock" loading="lazy"></div><div class="spot-body"><div class="spot-top"><h3>Woodstock Inn Brewery</h3><span class="tag">Brewpub</span></div><p>A big, festive brewpub in a late-1800s train station, brewing its own beer since 1982.</p><div class="spot-foot"><span>About 25 min · North Woodstock</span><a href="https://www.google.com/maps/search/?api=1&query=Woodstock+Inn+Brewery+North+Woodstock+NH" target="_blank" rel="noopener">Map</a></div></div></li>
-              <li class="spot"><div class="spot-img no-photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><path d="M7 3v8M5 3v5a2 2 0 004 0V3M7 11v10M16 3c-2 1.5-2.5 4-2.5 7h2.5v11"/></svg></div><div class="spot-body"><div class="spot-top"><h3>The Common Man</h3><span class="tag">Family-friendly</span></div><p>Cozy, classic New Hampshire comfort food. A reliable dinner for the whole group.</p><div class="spot-foot"><span>About 25 min · Lincoln</span><a href="https://www.google.com/maps/search/?api=1&query=The+Common+Man+Lincoln+NH" target="_blank" rel="noopener">Map</a></div></div></li>
-              <li class="spot"><div class="spot-img no-photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><path d="M7 3v8M5 3v5a2 2 0 004 0V3M7 11v10M16 3c-2 1.5-2.5 4-2.5 7h2.5v11"/></svg></div><div class="spot-body"><div class="spot-top"><h3>Black Mountain Burger</h3><span class="tag">Après-ski</span></div><p>Burgers and local beer after a day on the slopes at Loon.</p><div class="spot-foot"><span>About 25 min · Lincoln</span><a href="https://www.google.com/maps/search/?api=1&query=Black+Mountain+Burger+Lincoln+NH" target="_blank" rel="noopener">Map</a></div></div></li>
-              <li class="spot"><div class="spot-img"><img class="ph" src="img/guide/plymouth.jpg" alt="Historic view of Main Street, Plymouth" loading="lazy"></div><div class="spot-body"><div class="spot-top"><h3>Café Monte Alto</h3><span class="tag">Coffee</span></div><p>A downtown café stop before a day of exploring.</p><div class="spot-foot"><span>About 15 min · Plymouth</span><a href="https://www.google.com/maps/search/?api=1&query=Cafe+Monte+Alto+Plymouth+NH" target="_blank" rel="noopener">Map</a></div></div></li>
-            </ul>
-          </div>
-        </div>
+        <!-- built from guide.js -->
+        <div class="guide-panels rv" id="guidePanels"></div>
         <p class="guide-note rv">Drive times are approximate from North Peak. Hours and seasons change, so check before you go.</p>
         <details class="credits rv">
           <summary>Photo credits</summary>
-          <ul>
-            <li>Waterville Valley: EgorovaSvetlana, <a href="https://commons.wikimedia.org/wiki/File:Waterville_Valley_Resort_view.jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a></li>
-            <li>Loon Mountain: Luinfana, <a href="https://commons.wikimedia.org/wiki/File:Loonmtn_northpeak.JPG" target="_blank" rel="noopener">public domain</a></li>
-            <li>Tenney Mountain: MConradWard, <a href="https://commons.wikimedia.org/wiki/File:Upper_Racer_trail_at_Tenney_Mountain,_NH.jpg" target="_blank" rel="noopener">CC BY 4.0</a></li>
-            <li>Cannon Mountain: Ericshawwhite, <a href="https://commons.wikimedia.org/wiki/File:Mt._Layfayette_from_Cannon_Mountain_Ski.JPG" target="_blank" rel="noopener">CC BY-SA 3.0</a></li>
-            <li>Squam Lake: Andromeda321, <a href="https://commons.wikimedia.org/wiki/File:SquamLake.JPG" target="_blank" rel="noopener">public domain</a></li>
-            <li>Clark's Trading Post: rickpilot_2000, <a href="https://commons.wikimedia.org/wiki/File:Clark%27s_Trading_Post.jpg" target="_blank" rel="noopener">CC BY 2.0</a></li>
-            <li>Whale's Tale: Ken Gallager, <a href="https://commons.wikimedia.org/wiki/File:Whales_Tale_Lincoln_NH_2018.jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a></li>
-            <li>Polar Caves: EgorovaSvetlana, <a href="https://commons.wikimedia.org/wiki/File:Fallow_Deer_Animal_Exhibit_Polar_Caves_Park_Rumney_New_Hampshire.jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a></li>
-            <li>Flume Gorge: MyCatIsAChonk, <a href="https://commons.wikimedia.org/wiki/File:Flume_Gorge_July_2023.jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a></li>
-            <li>Kancamagus Highway: King of Hearts, <a href="https://commons.wikimedia.org/wiki/File:Kancamagus_Highway_October_2021_HDR.jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a></li>
-            <li>Welch and Dickey: Ken Gallager, <a href="https://commons.wikimedia.org/wiki/File:Welch_and_Dickey_from_Campton_July_2020.jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a></li>
-            <li>Lost River Gorge: Jllm06, <a href="https://commons.wikimedia.org/wiki/File:Lost_River_Gorge_waterfall_and_platform.jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a></li>
-            <li>Blair Bridge: Ken Gallager, <a href="https://commons.wikimedia.org/wiki/File:Blair_Bridge_Campton_NH.jpg" target="_blank" rel="noopener">CC BY-SA 3.0</a></li>
-            <li>Woodstock Inn Brewery: Kenneth C. Zirkel, <a href="https://commons.wikimedia.org/wiki/File:Woodstock_Inn_Brewery_New_Hampshire.jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a></li>
-            <li>Main Street, Plymouth: unknown, <a href="https://commons.wikimedia.org/wiki/File:Main_St.,_Plymouth,_NH.jpg" target="_blank" rel="noopener">public domain</a></li>
+          <ul id="guideCredits">
             <li>Photos via Wikimedia Commons, resized. Ski area logos belong to their resorts and are shown to identify them.</li>
           </ul>
         </details>
@@ -822,6 +765,7 @@ footer{background:var(--navy-deep);color:#a9b6c0;padding:40px 0 34px;font-size:.
 </footer>
 
 <script src="properties.js"></script>
+<script src="guide.js"></script>
 <script src="site.js"></script>
 <script>
 (function(){
@@ -1065,6 +1009,22 @@ footer{background:var(--navy-deep);color:#a9b6c0;padding:40px 0 34px;font-size:.
     }, { rootMargin: '600px 0px' });
     hio.observe(document.getElementById('homes'));
   }
+
+  /* local guide: tabs, cards and photo credits from guide.js (each category also has its own page) */
+  (function renderGuide(){
+    var G = NP.GUIDE;
+    document.getElementById('chips').innerHTML = G.map(function(c, i){
+      return '<button class="chip" role="tab" aria-selected="' + (i === 0) + '" aria-controls="g' + i + '" id="gt' + i + '"' + (i ? ' tabindex="-1"' : '') + '>' + esc(c.label) + '</button>';
+    }).join('');
+    document.getElementById('guidePanels').innerHTML = G.map(function(c, i){
+      return '<div class="gpanel' + (i ? '' : ' active') + '" role="tabpanel" id="g' + i + '" aria-labelledby="gt' + i + '"><ul class="spots">' +
+        c.spots.map(function(s){ return NP.spotHtml(s); }).join('') + '</ul>' +
+        '<p class="guide-more"><a class="link" href="' + esc(NP.guideUrl(c) + location.search) + '">' + esc(c.heading) + '</a></p></div>';
+    }).join('');
+    var credits = [];
+    G.forEach(function(c){ c.spots.forEach(function(s){ if (s.credit) credits.push(NP.creditHtml(s)); }); });
+    document.getElementById('guideCredits').insertAdjacentHTML('afterbegin', credits.join(''));
+  })();
 
   /* local guide category chips (same crossfade as the home tabs) */
   var chips = [].slice.call(document.querySelectorAll('#chips .chip'));
