@@ -97,6 +97,9 @@ ${shareOrigin ? `<meta property="og:image" content="${esc(abs(cover, 1600))}">\n
 ${JSON.stringify(schema, null, 2)}
 </script>
 <link rel="icon" href="/img/site/favicon.png">
+<link rel="apple-touch-icon" href="/img/site/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0f2435">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 ${fonts}
@@ -213,9 +216,15 @@ ${others.map(o => `        <li><a href="${NP.pageUrl(o)}"><div class="hp-cover">
   document.getElementById('hpActions').innerHTML = act ? '<a class="' + (act.primary ? 'btn btn-gold' : 'link') + '" href="' + NP.esc(act.href) + '">' + act.label + '</a>' : '';
   document.getElementById('hpActions').insertAdjacentHTML('afterend', NP.waitlistHtml(p));
   document.querySelectorAll('[data-form]').forEach(NP.wireForm);
+  var links = [].slice.call(document.querySelectorAll('.hp-photos a'));
+  var gallery = { title: p.name, tag: p.photos.kind === 'rendering' ? 'Renderings' : '',
+    items: links.map(function(a){ return { full: a.href, thumb: a.querySelector('img').src }; }) };
+  links.forEach(function(a, i){ a.addEventListener('click', function(e){ e.preventDefault(); NP.openLightbox(gallery, i); }); });
   if (act && act.online) document.querySelector('[data-book]').setAttribute('href', act.href);
 })();
 </script>
+<!-- Vercel Web Analytics: cookie-free page-view counts (enable it in the Vercel project's Analytics tab) -->
+<script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
 `;
@@ -246,7 +255,7 @@ ${noindex ? '<meta name="robots" content="noindex, nofollow">\n' : ''}${canonica
       <li><strong>When you join a waitlist:</strong> your email and the home you want to hear about.</li>
       <li><strong>Your theme choice:</strong> if you switch between light and dark, that choice is saved in your own browser. It is not sent to us.</li>
     </ul>
-    <p>We don't use advertising or tracking cookies.</p>
+    <p>We don't use advertising or tracking cookies. We count visits to each page in a way that doesn't identify you (see Vercel Web Analytics below).</p>
 
     <h2>How we use it</h2>
     <p>We use your details only to reply to your message, or to send you one email when the home you asked about opens for booking. We don't add you to marketing lists, and we never sell or rent your information.</p>
@@ -258,6 +267,7 @@ ${noindex ? '<meta name="robots" content="noindex, nofollow">\n' : ''}${canonica
     <ul>
       <li><strong>A form delivery service</strong> passes messages and waitlist sign-ups from this website to our email.</li>
       <li><strong>Vercel</strong> hosts the website. Like any web host, it keeps basic technical logs, such as IP address and browser type, to keep the site running and secure.</li>
+      <li><strong>Vercel Web Analytics</strong> counts page visits so we can see which pages are useful. It doesn't use cookies or identify you, and it doesn't follow you to other websites.</li>
       <li><strong>Google</strong> provides the website's fonts and map, so it receives your IP address when those load.</li>
       <li><strong>Lodgify</strong> provides the booking checkout.</li>
     </ul>
@@ -298,6 +308,24 @@ ${noindex ? '<meta name="robots" content="noindex, nofollow">\n' : ''}${canonica
 .legal-page .note{color:var(--muted);font-size:.9rem;margin-bottom:24px}
 </style>`);
   pages['privacy.html'] = privacy;
+
+  // ---------- 404 (Vercel serves 404.html for any address that doesn't exist) ----------
+  let missing = privacy;
+  [pre, post] = cut(missing, '<title>', '<link rel="icon"');
+  missing = pre + '<title>Page not found | North Peak Stays</title>\n<meta name="robots" content="noindex">\n' + post;
+  [pre, post] = cut(missing, '<main class="hp-main">', '</main>');
+  missing = pre + `<main class="hp-main">
+  <div class="wrap legal-page">
+    <h1>We couldn't find that page</h1>
+    <p>The page may have moved when the site was updated. These will get you where you're going:</p>
+    <ul class="hp-others nf-homes">
+${homes.map(o => `      <li><a href="${NP.pageUrl(o)}"><div class="hp-cover"><img src="${esc(src(o.photos.files[0], 800))}" alt="${esc(o.photos.coverAlt || o.name)}" loading="lazy"></div><h3>${esc(o.name)}</h3><span>${esc(NP.meta(o))}</span></a></li>`).join('\n')}
+    </ul>
+    <div class="actions nf-actions"><a class="btn btn-gold" href="/">Go to the homepage</a><a class="btn btn-line" href="/#plan">Plan your stay</a></div>
+  </div>
+` + post;
+  missing = missing.replace('.legal-page{max-width:760px}', '.legal-page{max-width:760px}\n.nf-homes{margin:28px 0 34px}\n.legal-page .nf-homes{padding-left:0}');
+  pages['404.html'] = missing;
 
   if (canonical) {
     const urls = ['/', ...homes.map(p => NP.pageUrl(p)), '/privacy'];

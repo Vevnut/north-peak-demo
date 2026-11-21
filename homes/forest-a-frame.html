@@ -93,6 +93,9 @@
 }
 </script>
 <link rel="icon" href="/img/site/favicon.png">
+<link rel="apple-touch-icon" href="/img/site/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0f2435">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
@@ -644,8 +647,14 @@ footer{background:var(--navy-deep);color:#a9b6c0;padding:40px 0 34px;font-size:.
   document.getElementById('hpActions').innerHTML = act ? '<a class="' + (act.primary ? 'btn btn-gold' : 'link') + '" href="' + NP.esc(act.href) + '">' + act.label + '</a>' : '';
   document.getElementById('hpActions').insertAdjacentHTML('afterend', NP.waitlistHtml(p));
   document.querySelectorAll('[data-form]').forEach(NP.wireForm);
+  var links = [].slice.call(document.querySelectorAll('.hp-photos a'));
+  var gallery = { title: p.name, tag: p.photos.kind === 'rendering' ? 'Renderings' : '',
+    items: links.map(function(a){ return { full: a.href, thumb: a.querySelector('img').src }; }) };
+  links.forEach(function(a, i){ a.addEventListener('click', function(e){ e.preventDefault(); NP.openLightbox(gallery, i); }); });
   if (act && act.online) document.querySelector('[data-book]').setAttribute('href', act.href);
 })();
 </script>
+<!-- Vercel Web Analytics: cookie-free page-view counts (enable it in the Vercel project's Analytics tab) -->
+<script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>

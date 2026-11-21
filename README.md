@@ -93,3 +93,11 @@ owner has tested it. A hidden field catches simple spam bots.
 does today: the contact form, the waitlist, Lodgify checkout, Vercel hosting, and Google fonts and maps. If you add
 analytics, a newsletter or anything else that collects data, update it, then the date in `NP_SITE.privacy`.
 The owner should read it before launch; set `NP_SITE.privacy.approved` to `true` once they have.
+
+### Icons, 404 page and analytics
+
+- `site.webmanifest` and `img/site/apple-touch-icon.png`, `icon-192.png`, `icon-512.png` give phones the North Peak
+  emblem when someone adds the site to their home screen.
+- `404.html` (built by `scripts/build-homes.mjs`) is what Vercel shows for any address that doesn't exist.
+- Every page loads Vercel Web Analytics (`/_vercel/insights/script.js`): cookie-free page-view counts, switched on in
+  the Vercel project's Analytics tab. The privacy policy mentions it. If it's ever switched off, remove the script tags.

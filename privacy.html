@@ -8,6 +8,9 @@
 <meta name="description" content="How the North Peak Stays website handles the information you share through its contact form, waitlist and booking links.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="/img/site/favicon.png">
+<link rel="apple-touch-icon" href="/img/site/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0f2435">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
@@ -516,7 +519,7 @@ footer{background:var(--navy-deep);color:#a9b6c0;padding:40px 0 34px;font-size:.
       <li><strong>When you join a waitlist:</strong> your email and the home you want to hear about.</li>
       <li><strong>Your theme choice:</strong> if you switch between light and dark, that choice is saved in your own browser. It is not sent to us.</li>
     </ul>
-    <p>We don't use advertising or tracking cookies.</p>
+    <p>We don't use advertising or tracking cookies. We count visits to each page in a way that doesn't identify you (see Vercel Web Analytics below).</p>
 
     <h2>How we use it</h2>
     <p>We use your details only to reply to your message, or to send you one email when the home you asked about opens for booking. We don't add you to marketing lists, and we never sell or rent your information.</p>
@@ -528,6 +531,7 @@ footer{background:var(--navy-deep);color:#a9b6c0;padding:40px 0 34px;font-size:.
     <ul>
       <li><strong>A form delivery service</strong> passes messages and waitlist sign-ups from this website to our email.</li>
       <li><strong>Vercel</strong> hosts the website. Like any web host, it keeps basic technical logs, such as IP address and browser type, to keep the site running and secure.</li>
+      <li><strong>Vercel Web Analytics</strong> counts page visits so we can see which pages are useful. It doesn't use cookies or identify you, and it doesn't follow you to other websites.</li>
       <li><strong>Google</strong> provides the website's fonts and map, so it receives your IP address when those load.</li>
       <li><strong>Lodgify</strong> provides the booking checkout.</li>
     </ul>
@@ -567,5 +571,7 @@ footer{background:var(--navy-deep);color:#a9b6c0;padding:40px 0 34px;font-size:.
   if (q) document.querySelectorAll('a[href^="/"]').forEach(function(a){ var h = a.getAttribute('href'), i = h.indexOf('#'); a.setAttribute('href', i < 0 ? h + q : h.slice(0, i) + q + h.slice(i)); });
 })();
 </script>
+<!-- Vercel Web Analytics: cookie-free page-view counts (enable it in the Vercel project's Analytics tab) -->
+<script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
