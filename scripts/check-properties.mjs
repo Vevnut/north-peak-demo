@@ -66,6 +66,7 @@ for (const [i, p] of (homes || []).entries()) {
 
 const usesText = (homes || []).some(p => p.status === 'text' || p.textAboutDates || (p.status === 'bookable' && !(p.booking && p.booking.approved)));
 if (usesText && !(site && site.text && site.text.approved === true)) pending.push('NP_SITE.text: texting number not yet approved for bookings');
+if (!(site && site.privacy && site.privacy.approved === true)) pending.push('NP_SITE.privacy: privacy policy page not yet reviewed by the owner');
 const forms = (site && site.forms) || {};
 if (forms.endpoint && !/^https:\/\//.test(forms.endpoint)) errors.push('NP_SITE.forms.endpoint must start with https://');
 if (!forms.endpoint) pending.push('NP_SITE.forms: no endpoint yet, so the contact form and waitlist are hidden on the launched site');

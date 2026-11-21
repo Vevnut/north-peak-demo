@@ -1,5 +1,5 @@
 // Builds one page per home (homes/<name>.html, served at /homes/<name>) from properties.js,
-// plus sitemap.xml once index.html has its canonical link.
+// the privacy policy (privacy.html, at /privacy), and sitemap.xml once index.html has its canonical link.
 //
 //   node scripts/build-homes.mjs          write the pages
 //   node scripts/build-homes.mjs --check  only report pages that are out of date (used by check-properties)
@@ -194,7 +194,7 @@ ${others.map(o => `        <li><a href="${NP.pageUrl(o)}"><div class="hp-cover">
 <footer class="hp-foot">
   <div class="wrap">
     <span>© 2026 North Peak Stays · 151 Pinnacle Road, Campton, NH 03223</span>
-    <span><a href="/">Home</a> · <a href="/#experiences">Experiences</a> · <a href="/#reviews">Reviews</a> · <a href="/#plan">Plan your stay</a></span>
+    <span><a href="/">Home</a> · <a href="/#experiences">Experiences</a> · <a href="/#reviews">Reviews</a> · <a href="/#plan">Plan your stay</a> · <a href="/privacy">Privacy</a></span>
   </div>
 </footer>
 
@@ -222,8 +222,85 @@ ${others.map(o => `        <li><a href="${NP.pageUrl(o)}"><div class="hp-cover">
     pages[`homes/${slug}.html`] = html;
   }
 
+  // ---------- privacy policy (/privacy): same frame as a home page, its own head and content ----------
+  const base = Object.values(pages)[0];
+  const cut = (s, a, b) => { const i = s.indexOf(a), j = s.indexOf(b, i); if (i < 0 || j < 0) throw new Error('privacy template: ' + a); return [s.slice(0, i), s.slice(j)]; };
+  const pv = NP.SITE.privacy || {};
+  const lodgifyPrivacy = 'https://www.lodgify.com/privacy/';
+  let privacy = base;
+  let [pre, post] = cut(privacy, '<title>', '<link rel="icon"');
+  privacy = pre + `<title>Privacy Policy | North Peak Stays</title>
+<meta name="description" content="How the North Peak Stays website handles the information you share through its contact form, waitlist and booking links.">
+${noindex ? '<meta name="robots" content="noindex, nofollow">\n' : ''}${canonical ? `<link rel="canonical" href="${canonical}/privacy">\n` : ''}` + post;
+  [pre, post] = cut(privacy, '<main class="hp-main">', '</main>');
+  privacy = pre + `<main class="hp-main">
+  <div class="wrap legal-page">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">North Peak Stays</a> › <span aria-current="page">Privacy policy</span></nav>
+    <h1>Privacy policy</h1>
+    <p class="note">Last updated ${esc(pv.updated || '')}</p>
+    <p>This page explains what information the North Peak Stays website collects, why, and what we do with it. North Peak Stays is based at 151 Pinnacle Road, Campton, NH 03223.</p>
+
+    <h2>What we collect</h2>
+    <ul>
+      <li><strong>When you send us a message:</strong> your name and email, and if you choose to add them, your phone number, travel dates, the home you're asking about and your message.</li>
+      <li><strong>When you join a waitlist:</strong> your email and the home you want to hear about.</li>
+      <li><strong>Your theme choice:</strong> if you switch between light and dark, that choice is saved in your own browser. It is not sent to us.</li>
+    </ul>
+    <p>We don't use advertising or tracking cookies.</p>
+
+    <h2>How we use it</h2>
+    <p>We use your details only to reply to your message, or to send you one email when the home you asked about opens for booking. We don't add you to marketing lists, and we never sell or rent your information.</p>
+
+    <h2>Booking</h2>
+    <p>When you book, you complete your reservation and payment on Lodgify's secure checkout. Lodgify handles those details under <a href="${lodgifyPrivacy}" target="_blank" rel="noopener">its own privacy policy</a>, and we receive the reservation details we need to host your stay.</p>
+
+    <h2>Services that help run this website</h2>
+    <ul>
+      <li><strong>A form delivery service</strong> passes messages and waitlist sign-ups from this website to our email.</li>
+      <li><strong>Vercel</strong> hosts the website. Like any web host, it keeps basic technical logs, such as IP address and browser type, to keep the site running and secure.</li>
+      <li><strong>Google</strong> provides the website's fonts and map, so it receives your IP address when those load.</li>
+      <li><strong>Lodgify</strong> provides the booking checkout.</li>
+    </ul>
+    <p>We share information with these services only so they can do these jobs.</p>
+
+    <h2>How long we keep it</h2>
+    <p>We keep messages for as long as we need them to answer you and look after your stay. We delete waitlist emails after we've sent the opening announcement, or sooner if you ask.</p>
+
+    <h2>Your choices</h2>
+    <p>You can ask us to show you, correct or delete the information you've sent us, and you can ask to leave a waitlist at any time. Contact us using the details below.</p>
+
+    <h2>Children</h2>
+    <p>This website is meant for adults planning a trip. We don't knowingly collect information from children under 13.</p>
+
+    <h2>Changes</h2>
+    <p>If we change how we handle information, we'll update this page and the date at the top.</p>
+
+    <h2>Contact us</h2>
+    <p>North Peak Stays, 151 Pinnacle Road, Campton, NH 03223. Phone or text <a href="tel:+16178160401">+1 617 816 0401</a>.</p>
+  </div>
+` + post;
+  [pre, post] = cut(privacy, '<script>\n(function(){\n  /* the button and badge', '</script>');
+  privacy = pre + `<script>
+(function(){
+  var NP = window.NP;
+  if (NP.liveHost){ var t = document.querySelector('.demo-tag'); if (t) t.remove(); }
+  var q = location.search;
+  if (q) document.querySelectorAll('a[href^="/"]').forEach(function(a){ var h = a.getAttribute('href'), i = h.indexOf('#'); a.setAttribute('href', i < 0 ? h + q : h.slice(0, i) + q + h.slice(i)); });
+})();
+` + post;
+  privacy = privacy.replace('</style>', `.legal-page{max-width:760px}
+.legal-page h1{font-family:var(--serif);font-weight:500;font-size:clamp(2.4rem,4.4vw,3.4rem);color:var(--heading);margin:4px 0 6px}
+.legal-page h2{font-family:var(--serif);font-weight:500;font-size:1.7rem;color:var(--heading);margin:38px 0 10px}
+.legal-page p,.legal-page li{color:var(--ink);line-height:1.7}
+.legal-page p+p,.legal-page ul+p,.legal-page p+ul{margin-top:12px}
+.legal-page ul{padding-left:20px;display:grid;gap:8px}
+.legal-page a{color:var(--heading)}
+.legal-page .note{color:var(--muted);font-size:.9rem;margin-bottom:24px}
+</style>`);
+  pages['privacy.html'] = privacy;
+
   if (canonical) {
-    const urls = ['/', ...homes.map(p => NP.pageUrl(p))];
+    const urls = ['/', ...homes.map(p => NP.pageUrl(p)), '/privacy'];
     pages['sitemap.xml'] = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(u => `  <url><loc>${canonical}${u}</loc></url>`).join('\n')}\n</urlset>\n`;
   }
   return pages;

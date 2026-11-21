@@ -86,3 +86,10 @@ waitlist, on the homepage and on its own page. Both send to `NP_SITE.forms.endpo
 of a form service set up with the owner's email (for example Formspree; free plans cover a small site). Until that is
 set, previews show the forms but don't send anything, and the launched site hides them. Set `approved: true` once the
 owner has tested it. A hidden field catches simple spam bots.
+
+### Privacy policy
+
+`/privacy` is built by `scripts/build-homes.mjs` (its text is in that script). It describes exactly what the site
+does today: the contact form, the waitlist, Lodgify checkout, Vercel hosting, and Google fonts and maps. If you add
+analytics, a newsletter or anything else that collects data, update it, then the date in `NP_SITE.privacy`.
+The owner should read it before launch; set `NP_SITE.privacy.approved` to `true` once they have.

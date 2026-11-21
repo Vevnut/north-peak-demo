@@ -24,6 +24,9 @@ window.NP_SITE = {
   // service (for example Formspree) set up with the owner's email. Empty = previews show the
   // forms but don't send; the launched site hides them until an endpoint is set and approved.
   forms: { endpoint: "", approved: false },
+  // The privacy policy page (/privacy, built by scripts/build-homes.mjs). The owner should read it
+  // before launch; set approved once they have.
+  privacy: { updated: "November 2026", approved: false },
   // Booking links must point to one of these hosts (checked by scripts/check-properties.mjs).
   bookingHosts: ["checkout.lodgify.com"]
 };

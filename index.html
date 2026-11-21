@@ -336,6 +336,7 @@ section{padding:150px 0}
 .np-form .btn{justify-self:start;cursor:pointer}
 .np-form .btn:disabled{opacity:.6;cursor:wait}
 .form-note{grid-column:1/-1;font-size:.8rem;color:var(--muted)}
+.form-note a{color:inherit}
 .form-status{grid-column:1/-1;font-size:.92rem;color:var(--heading);font-weight:500}
 .form-status:empty{display:none}
 .form-status.bad{color:#c0392b}
@@ -764,7 +765,7 @@ footer{background:var(--navy-deep);color:#a9b6c0;padding:40px 0 34px;font-size:.
         <label class="full">Message <textarea name="message" required></textarea></label>
         <label class="trap" aria-hidden="true">Leave empty <input name="_gotcha" tabindex="-1" autocomplete="off"></label>
         <button class="btn btn-gold" type="submit">Send message</button>
-        <p class="form-note">We use your details only to reply to you.</p>
+        <p class="form-note">We use your details only to reply to you. <a href="/privacy">Privacy policy</a></p>
         <p class="form-status" role="status" aria-live="polite"></p>
       </form>
     </div>
@@ -812,7 +813,7 @@ footer{background:var(--navy-deep);color:#a9b6c0;padding:40px 0 34px;font-size:.
     </div>
     <div class="legal">
       <span>© 2026 North Peak Stays. All rights reserved.</span>
-      <span>Book direct &amp; save 10% or more</span>
+      <span><a href="/privacy">Privacy policy</a> · Book direct &amp; save 10% or more</span>
     </div>
   </div>
 </footer>

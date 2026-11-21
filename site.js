@@ -31,7 +31,7 @@ window.NP = (function(){
       '<label>Email me when it opens <input type="email" name="email" autocomplete="email" placeholder="you@example.com" required></label>' +
       '<button class="btn btn-line" type="submit">Notify me</button>' +
       '<label class="trap" aria-hidden="true">Leave empty <input name="_gotcha" tabindex="-1" autocomplete="off"></label>' +
-      '<p class="form-note">One email when bookings open. We never share your address.</p>' +
+      '<p class="form-note">One email when bookings open. We never share your address. <a href="/privacy' + location.search + '">Privacy policy</a></p>' +
       '<p class="form-status" role="status" aria-live="polite"></p></form>';
   }
   function wireForm(f){
